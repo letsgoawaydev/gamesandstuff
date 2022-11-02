@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="gameCovers.png">
+<SubTexture name="gameCovers 0game0000" x="0" y="0" width="1801" height="720" frameX="-61" frameY="0" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 1game0000" x="0" y="2138" width="1881" height="445" frameX="-23" frameY="-142" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 2game0000" x="1801" y="0" width="1286" height="713" frameX="-299" frameY="0" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 3game0000" x="0" y="1439" width="1331" height="699" frameX="-293" frameY="-9" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 4game0000" x="0" y="720" width="1082" height="719" frameX="-419" frameY="0" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 5game0000" x="3087" y="0" width="1818" height="133" frameX="-51" frameY="-294" frameWidth="1920" frameHeight="720" />
+<SubTexture name="gameCovers 6game0000" x="0" y="2583" width="1820" height="414" frameX="-50" frameY="-103" frameWidth="1920" frameHeight="720" />
+</TextureAtlas>

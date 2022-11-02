@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="platforms.png">
+<SubTexture name="platforms pc0000" x="76" y="0" width="88" height="80" frameX="-4" frameY="-8" frameWidth="96" frameHeight="96" />
+<SubTexture name="platforms mobile0000" x="0" y="0" width="76" height="96" frameX="-8" frameY="0" frameWidth="96" frameHeight="96" />
+<SubTexture name="platforms gamepad0000" x="0" y="96" width="88" height="48" frameX="-4" frameY="-24" frameWidth="96" frameHeight="96" />
+</TextureAtlas>
