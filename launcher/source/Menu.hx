@@ -598,12 +598,14 @@ class Menu extends FlxState
 			{
 				if (started)
 				{
-					mouseDown = true;
-					started = true;
 					playButtonClick(playButton);
 					_save.flush();
 				}
-				else {}
+				else
+				{
+					mouseDown = true;
+					started = true;
+				}
 			}
 		}
 		else
