@@ -4,12 +4,12 @@
 # About
 Games and Stuff is a frontend UI for launching games hosted online. I mainly use repl.it, but by editing the source code you can redirect to what ever.
 # Launcher
-The main ui.
+The main interface. It is written in Haxe using OpenFL and HaxeFlixel.
 ## Platforms
 Currently supported platforms are:
 Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge and the Web.
 I plan to expand support to PS5 Browser, Nintendo Switch hidden browser via [SwitchBru](https://switchbru.com/dns), and native applications for Linux and macOS.
 # Shortcut
-An easy to access way to go directly to games and stuff without having to install the entire launcher.
+An easy to access way to go directly to games and stuff without having to install the entire launcher. It is written in html.
 ## Platforms
 Windows only for now as it is an HTA Application.
