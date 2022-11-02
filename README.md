@@ -3,7 +3,13 @@
 [Stable](https://gamesandstuff.letsgoaway.repl.co) | [Development](https://gamesandstuffdevver.letsgoaway.repl.co)
 ## About
 Games and Stuff is a frontend UI for launching games hosted online. I mainly use repl.it, but by editing the source code you can redirect to what ever.
+# Launcher
+The main ui.
 ## Platforms
 Currently supported platforms are:
-Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge.
+Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge and the Web.
 I plan to expand support to PS5 Browser, Nintendo Switch hidden browser via [SwitchBru](https://switchbru.com/dns), and native applications for Linux and macOS.
+# Shortcut
+An easy to access way to go directly to games and stuff without having to install the entire launcher.
+## Platforms
+Windows only for now as it is an HTA Application.
