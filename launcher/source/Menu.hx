@@ -31,7 +31,8 @@ class Menu extends FlxState
 		'doomjscompressed',
 		'doomjscompressed',
 		'half-life',
-		'mcEagler'
+		'mcEagler',
+		'mari0'
 	];
 	var gameSupportsPlatforms:Array<Array<Bool>> = [
 		// PC  Mobile Gamepad
@@ -41,6 +42,7 @@ class Menu extends FlxState
 		[true, true, false],
 		[true, true, false],
 		[true, false, false],
+		[true, false, false],
 		[true, false, false]
 	];
 	var gameLinkEndTags:Array<String> = [
@@ -49,6 +51,7 @@ class Menu extends FlxState
 		'/',
 		'/?bundleUrl=/d?anonymous=1',
 		'/?bundleUrl=/d2?anonymous=1',
+		'/',
 		'/',
 		'/'
 	];
@@ -74,6 +77,9 @@ class Menu extends FlxState
 	var mobileIn:FlxTween;
 	var gamepadIn:FlxTween;
 	var fader:FlxExtendedSprite = new FlxExtendedSprite();
+	var faderIn:FlxTween;
+	var faderOut:FlxTween;
+	var text:FlxText = new FlxText();
 	// Flixel
 	var gamepad:FlxGamepad;
 	// Booleans
@@ -85,11 +91,12 @@ class Menu extends FlxState
 	var touchingui:Bool = false;
 	var gamepad_left:Bool = false;
 	var gamepad_right:Bool = false;
-	var startButtonFix = false;
+	var startButtonFix:Bool = false;
+	var inSecondaryMenu:Bool = false;
 	// Float
 	var titlesize:Float = 0.5;
 	// Ints
-	var downloadTimesClicked = 0;
+	var downloadTimesClicked:Int = 0;
 	// Strings
 	var currentGame:String = "";
 	var fontFix:String = "";
@@ -245,6 +252,36 @@ class Menu extends FlxState
 		platMobile.animation.play("mobile");
 		add(platGamepad);
 		platGamepad.animation.play("gamepad");
+		// text.text = "Hello, World!";
+		// text.font = "Monsterrat";
+		// text.color = FlxColor.WHITE;
+		// text.size = 32;
+		// text.screenCenter();
+		// add(text);
+		fader.makeGraphic(1280, 720, FlxColor.BLACK);
+		fader.screenCenter();
+		fader.alpha = 0;
+		add(fader);
+	}
+
+	function uiFaderIn(alphaVal:Float):Void
+	{
+		faderIn = FlxTween.tween(fader, {
+			alpha: alphaVal
+		}, 0.15, {
+			type: FlxTweenType.ONESHOT
+		});
+		inSecondaryMenu = true;
+	}
+
+	function uiFaderOut():Void
+	{
+		faderOut = FlxTween.tween(fader, {
+			alpha: 0,
+		}, 0.15, {
+			type: FlxTweenType.ONESHOT
+		});
+		inSecondaryMenu = false;
 	}
 
 	function downloadClicked(download:FlxExtendedSprite):Void
@@ -336,8 +373,6 @@ class Menu extends FlxState
 		}
 	}
 
-	function uiFadeOut(alpha:Float):Void {}
-
 	function gamepadInAnim(?_:FlxTween):Void
 	{
 		if (currentGameSupportsGamepad())
@@ -424,27 +459,45 @@ class Menu extends FlxState
 
 	// Mouse Related Scripts
 	// Click
-	function leftArrowClick(leftArrow:FlxExtendedSprite):Void
+	function leftArrowClick(?leftArrow:FlxExtendedSprite):Void
 	{
-		if (gameID == 0)
+		if (!inSecondaryMenu)
 		{
-			gameID = gameStringID.length - 1;
+			if (gameID == 0)
+			{
+				gameID = gameStringID.length - 1;
+			}
+			else
+			{
+				gameID--;
+			}
+			gameID = gameID % gameStringID.length;
+			togglePositions();
+			sound("assets/sounds/left");
 		}
-		else
-		{
-			gameID--;
-		}
-		gameID = gameID % gameStringID.length;
-		togglePositions();
-		sound("assets/sounds/left");
 	}
 
-	function rightArrowClick(rightArrow:FlxExtendedSprite):Void
+	function rightArrowClick(?rightArrow:FlxExtendedSprite):Void
 	{
-		sound("assets/sounds/right");
-		gameID++;
-		gameID = gameID % gameStringID.length;
-		togglePositions();
+		if (!inSecondaryMenu)
+		{
+			sound("assets/sounds/right");
+			gameID++;
+			gameID = gameID % gameStringID.length;
+			togglePositions();
+		}
+	}
+
+	function playButtonClick(playButton:FlxExtendedSprite):Void
+	{
+		if (!inSecondaryMenu)
+		{
+			if (startButtonFix)
+			{
+				sound("assets/sounds/play");
+				redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + gameLinkEndTags[gameID]);
+			}
+		}
 	}
 
 	function fadeChar(?_:FlxTween):Void
@@ -544,21 +597,19 @@ class Menu extends FlxState
 			gameChar.x = 11;
 			gameChar.y = -99;
 		}
+		else if (gameID == 7)
+		{
+			gameCover.x = -176;
+			gameCover.y = -113;
+			gameChar.x = 40;
+			gameChar.y = -110;
+		}
 		else
 		{
 			gameCover.x = -243;
 			gameCover.y = -114;
 			gameChar.x = 178;
 			gameChar.y = -114;
-		}
-	}
-
-	function playButtonClick(playButton:FlxExtendedSprite):Void
-	{
-		if (startButtonFix)
-		{
-			sound("assets/sounds/play");
-			redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + gameLinkEndTags[gameID]);
 		}
 	}
 
@@ -626,17 +677,25 @@ class Menu extends FlxState
 		{
 			if (started)
 			{
-				leftArrowClick(leftArrow);
+				leftArrowClick();
 			}
+		}
+		if (FlxG.keys.justReleased.D)
+		{
+			TechnicFunctions.winAlert("test", "shouldBeError", "error");
+		}
+		if (FlxG.keys.justReleased.F)
+		{
+			uiFaderOut();
 		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{
 			if (started)
 			{
-				rightArrowClick(rightArrow);
+				rightArrowClick();
 			}
 		}
-		if (FlxG.keys.justReleased.ENTER || FlxG.keys.justReleased.SPACE || FlxG.keys.justReleased.F3)
+		if (FlxG.keys.justReleased.ENTER || FlxG.keys.justReleased.SPACE)
 		{
 			if (started)
 			{
@@ -671,19 +730,22 @@ class Menu extends FlxState
 				}
 			}
 		}
-
-		uiGrowThingy(leftArrow, 1.15, FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver);
-		uiGrowThingy(rightArrow, 1.15, FlxG.keys.pressed.RIGHT || gamepad_right || rightArrow.mouseOver);
 		_save.data.lastgameid = gameID;
 		if (started)
 		{
-			if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
+			if (!inSecondaryMenu)
 			{
-				Mouse.cursor = "button";
-			}
-			else
-			{
-				Mouse.cursor = "arrow";
+				uiGrowThingy(leftArrow, 1.15, FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver);
+				uiGrowThingy(rightArrow, 1.15, FlxG.keys.pressed.RIGHT || gamepad_right || rightArrow.mouseOver);
+
+				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
+				{
+					Mouse.cursor = "button";
+				}
+				else
+				{
+					Mouse.cursor = "arrow";
+				}
 			}
 			if (!menuLoaded)
 			{

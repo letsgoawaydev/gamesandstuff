@@ -26,6 +26,8 @@ var sfx:SoundFrontEnd = FlxG.sound;
 var musicAudio:SoundFrontEnd = FlxG.sound;
 var inputType:String = "Keyboard";
 var music:FlxSound;
+var t:Int;
+var quote = "";
 
 /**
  * sfx shorthand
@@ -181,5 +183,43 @@ function alert(message:Null<String>, ?title:Null<String>):Void
 	{
 		Browser.alert(message);
 	}
+	#end
+}
+
+function winAlert(message:Null<String>, ?title:Null<String>, ?type:Null<String>)
+{
+	#if windows
+	if (type == null)
+	{
+		t = 64;
+	}
+	if (title == null)
+	{
+		title = "";
+	}
+	else
+	{
+		type = type.toLowerCase();
+		if (type == "error")
+		{
+			t = 16;
+		}
+		else if (type == "question")
+		{
+			t = 32;
+		}
+		else if (type == "warning")
+		{
+			t = 48;
+		}
+		else if (type == "info")
+		{
+			t = 64;
+		}
+	}
+	var array:Array<String> = [
+		"vbscript:msgbox(" + quote + message + quote + "," + t + "," + quote + title + quote + ")\\close()"
+	];
+	Sys.command("mshta", array);
 	#end
 }
