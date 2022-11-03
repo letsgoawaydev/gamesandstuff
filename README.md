@@ -10,6 +10,8 @@ Currently supported platforms are:
 Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge and the Web.
 I plan to expand support to PS5 Browser, Nintendo Switch hidden browser via [SwitchBru](https://switchbru.com/dns), and native applications for Linux and macOS.
 # Shortcut
-An easy to access way to go directly to games and stuff without having to install the entire launcher. It is written in html.
+An easy to access way to go directly to games and stuff without having to install the entire launcher. It is written in HTML.
+## How it works
+By using an hta app, we use mshta.exe, a built-in app to windows.
 ## Platforms
 Windows only for now as it is an HTA Application.
