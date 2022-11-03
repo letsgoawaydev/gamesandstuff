@@ -5,9 +5,9 @@
 [![Discord](https://discordapp.com/api/guilds/828428540272967680/widget.png?style=shield)](https://discord.gg/up7VmmCPhn)
 </div>
 
-<div align="center">
+
 [Stable](https://gamesandstuff.letsgoaway.repl.co) | [Development](https://gamesandstuffdevver.letsgoaway.repl.co) | [Windows Launcher](https://gamesandstuffdl--letsgoaway.repl.co)
-</div>
+
 
 # About
 Games and Stuff is a frontend UI for launching games hosted online. I mainly use repl.it, but by editing the source code you can redirect to what ever.
