@@ -20,6 +20,7 @@ It is represented as `launch`.
 Currently supported platforms are:
 Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge and the Web.
 I plan to expand support to PS5 Browser, Nintendo Switch hidden browser via [SwitchBru](https://switchbru.com/dns), and native applications for Linux and macOS.
+You can read on how to install it on each device [here](https://github.com/ethpsa09/gamesandstuff/wiki/Installation).
 # Shortcut
 An easy to access way to go directly to games and stuff without having to install the entire launcher. It is written in HTML.
 It is represented as `cut`.
