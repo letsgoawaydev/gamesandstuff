@@ -1,6 +1,7 @@
 ![gamesandstuff](https://user-images.githubusercontent.com/68365423/199411065-61e6c76c-72c0-46f3-9e8d-195eb69f58f5.png)
-## A frontend launcher for playing games on many devices at school, home or anywhere else.
 <div align="center">
+
+## A frontend launcher for playing games on many devices at school, home or anywhere else.
 
 [![Platforms](https://img.shields.io/badge/platforms-ios%20pwa%20%7C%20windows%20%7C%20web%20%7C%20xbox%20via%20ms%20edge-lightgrey)]()
 [![Discord](https://discordapp.com/api/guilds/828428540272967680/widget.png?style=shield)](https://discord.gg/up7VmmCPhn)
