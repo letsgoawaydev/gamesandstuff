@@ -4,9 +4,9 @@
 
 [![Platforms](https://img.shields.io/badge/platforms-ios%20pwa%20%7C%20windows%20%7C%20web%20%7C%20xbox%20via%20ms%20edge-lightgrey)]()
 [![Discord](https://discordapp.com/api/guilds/828428540272967680/widget.png?style=shield)](https://discord.gg/up7VmmCPhn)
-</div>
 
 [Stable](https://gamesandstuff.letsgoaway.repl.co) | [Development](https://gamesandstuffdevver.letsgoaway.repl.co) | [Windows Launcher](https://gamesandstuffdl--letsgoaway.repl.co)
+</div>
 
 # About
 We are currently under active development.
