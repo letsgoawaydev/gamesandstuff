@@ -397,7 +397,7 @@ class Menu extends FlxState
 					if (currentGameSupportsMobile())
 					{
 						platGamepad.x = 307;
-						platGamepad.x = 398;
+						platGamepad.y = 398;
 						platGamepad.alpha = 0;
 						gamepadIn = FlxTween.tween(platGamepad, {
 							alpha: 1,
@@ -410,6 +410,7 @@ class Menu extends FlxState
 					else
 					{
 						platGamepad.x = 207;
+						platGamepad.y = 398;
 						platGamepad.alpha = 0;
 						gamepadIn = FlxTween.tween(platGamepad, {
 							alpha: 1,
