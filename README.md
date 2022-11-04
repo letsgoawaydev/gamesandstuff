@@ -26,3 +26,6 @@ An easy to access way to go directly to games and stuff without having to instal
 It is represented as `cut`.
 ## Platforms
 Windows only for now as it is an HTA Application.
+# Disclaimer
+Some of the things that are in my app I do not own, such as game logos and game characters.
+An update will be out soon where it adds the developers of the games under the game logo.
