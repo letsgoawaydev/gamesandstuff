@@ -13,9 +13,11 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Log;
+import lime.net.HTTPRequest;
 import lime.ui.Window;
 import lime.ui.WindowAttributes;
 import openfl.Lib;
+import openfl.display.BitmapData;
 import openfl.system.Capabilities;
 #if html5
 import js.Browser;
@@ -121,6 +123,9 @@ function checkForFullScreenToggle():Void
 	#end
 }
 
+/**
+ * If in fullscreen, exits and centers screen
+ */
 function toggleFullscreen():Void
 {
 	#if desktop
@@ -147,6 +152,34 @@ function spriteFadeIn(sprite:FlxExtendedSprite, duration:Float):Void
 function valToString(val:Any):String
 {
 	return val + "";
+}
+
+/**
+ * Loads an image from a url and loads it to sprite.
+ */
+function loadImageFromUrltoSprite(sprite:FlxSprite, imgUrl:String):Void
+{
+	sprite.alpha = 0;
+	var req = new HTTPRequest<BitmapData>();
+	req.load(imgUrl).onComplete(function(image)
+	{
+		sprite.loadGraphic(image);
+		sprite.alpha = 1;
+	});
+}
+
+/**
+ * Loads an string from a text file on a url and loads it to sprite.
+ */
+function loadStringFromUrl(linkToTxt:String):Null<String>
+{
+	var req = new HTTPRequest<String>();
+	var txt:Null<String>;
+	req.load(linkToTxt).onComplete(function(text:Null<String>)
+	{
+		txt = text;
+	});
+	return txt;
 }
 
 function staticSpritesheetAnimAdd(sprite:FlxSprite, name:String, animName:String):Void

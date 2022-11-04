@@ -13,11 +13,12 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxSave;
+import lime.net.HTTPRequest;
+import openfl.display.BitmapData;
 import openfl.ui.Mouse;
 #if html5
 import js.Browser;
 #end
-
 // Hello fellow developer! Thanks for stopping by.
 // You can do what ever you want with this code. A credit is encouraged but optional.
 class Menu extends FlxState
@@ -525,6 +526,10 @@ class Menu extends FlxState
 	{
 		gameCover.alpha = 0;
 		gameChar.alpha = 0;
+		var yay:FlxSprite = new FlxSprite();
+		loadImageFromUrltoSprite(yay, "https://www.youtube.com/favicon.ico");
+		add(yay);
+		yay.screenCenter();
 		if (!dontDoFades || dontDoFades == null)
 		{
 			fadeChar();
@@ -679,10 +684,6 @@ class Menu extends FlxState
 			{
 				leftArrowClick();
 			}
-		}
-		if (FlxG.keys.justReleased.D)
-		{
-			TechnicFunctions.winAlert("test", "shouldBeError", "error");
 		}
 		if (FlxG.keys.justReleased.F)
 		{
