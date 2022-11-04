@@ -16,9 +16,8 @@ import flixel.util.FlxSave;
 import lime.net.HTTPRequest;
 import openfl.display.BitmapData;
 import openfl.ui.Mouse;
-#if html5
-import js.Browser;
-#end
+#if html5 import js.Browser; #end
+
 // Hello fellow developer! Thanks for stopping by.
 // You can do what ever you want with this code. A credit is encouraged but optional.
 class Menu extends FlxState
@@ -287,14 +286,17 @@ class Menu extends FlxState
 
 	function downloadClicked(download:FlxExtendedSprite):Void
 	{
-		downloadTimesClicked++;
-		if (downloadTimesClicked == 1)
+		if (!inSecondaryMenu)
 		{
-			alert("This will download the latest version of the games and stuff launcher. It is only availible for Windows and does not work on iPad. \nFor iPad users, click the share button and click on Add to Home Screen. \nClick the download button again to download the launcher for windows. Drag the file to your desktop for easy access and double click to run.\nIf a menu shows up saying \"Do you want to run?\", turn off Always Ask before opening this file and click run. \nDownload menu coming soon.");
-		}
-		else
-		{
-			redirect("https://gamesandstuffdl--letsgoaway.repl.co");
+			downloadTimesClicked++;
+			if (downloadTimesClicked == 1)
+			{
+				alert("This will download the latest version of the games and stuff launcher. It is only availible for Windows and does not work on iPad. \nFor iPad users, click the share button and click on Add to Home Screen. \nClick the download button again to download the launcher for windows. Drag the file to your desktop for easy access and double click to run.\nIf a menu shows up saying \"Do you want to run?\", turn off Always Ask before opening this file and click run. \nDownload menu coming soon.");
+			}
+			else
+			{
+				redirect("https://gamesandstuffdl--letsgoaway.repl.co");
+			}
 		}
 	}
 
@@ -325,6 +327,7 @@ class Menu extends FlxState
 			{
 				platPC.alpha = 0;
 				platPC.x = 107;
+				platPC.y = 407;
 				pcIn = FlxTween.tween(platPC, {
 					alpha: 1,
 					x: 207
@@ -334,6 +337,11 @@ class Menu extends FlxState
 				});
 				pcIn.start();
 			}
+		}
+		else
+		{
+			platPC.x = 0;
+			platPC.y = 0;
 		}
 	}
 
@@ -350,6 +358,7 @@ class Menu extends FlxState
 				if (currentGameSupportsPC())
 				{
 					platMobile.x = 207;
+					platMobile.y = 407;
 					platMobile.alpha = 0;
 
 					mobileIn = FlxTween.tween(platMobile, {
@@ -369,6 +378,8 @@ class Menu extends FlxState
 		}
 		else
 		{
+			platMobile.x = 0;
+			platMobile.y = 0;
 			platMobile.alpha = 0;
 			gamepadInAnim();
 		}
@@ -386,6 +397,7 @@ class Menu extends FlxState
 					if (currentGameSupportsMobile())
 					{
 						platGamepad.x = 307;
+						platGamepad.x = 398;
 						platGamepad.alpha = 0;
 						gamepadIn = FlxTween.tween(platGamepad, {
 							alpha: 1,
@@ -412,6 +424,8 @@ class Menu extends FlxState
 		}
 		else
 		{
+			platGamepad.x = 0;
+			platGamepad.y = 0;
 			platGamepad.alpha = 0;
 		}
 	}
@@ -526,10 +540,7 @@ class Menu extends FlxState
 	{
 		gameCover.alpha = 0;
 		gameChar.alpha = 0;
-		var yay:FlxSprite = new FlxSprite();
-		loadImageFromUrltoSprite(yay, "https://www.youtube.com/favicon.ico");
-		add(yay);
-		yay.screenCenter();
+
 		if (!dontDoFades || dontDoFades == null)
 		{
 			fadeChar();
@@ -619,6 +630,7 @@ class Menu extends FlxState
 	}
 
 	// Hover
+
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -688,6 +700,10 @@ class Menu extends FlxState
 		if (FlxG.keys.justReleased.F)
 		{
 			uiFaderOut();
+		}
+		if (FlxG.keys.justReleased.D)
+		{
+			uiFaderIn(0.5);
 		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{

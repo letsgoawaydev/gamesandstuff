@@ -19,9 +19,7 @@ import lime.ui.WindowAttributes;
 import openfl.Lib;
 import openfl.display.BitmapData;
 import openfl.system.Capabilities;
-#if html5
-import js.Browser;
-#end
+#if html5 import js.Browser; #end
 
 var gamepad:FlxGamepad;
 var sfx:SoundFrontEnd = FlxG.sound;
@@ -166,20 +164,6 @@ function loadImageFromUrltoSprite(sprite:FlxSprite, imgUrl:String):Void
 		sprite.loadGraphic(image);
 		sprite.alpha = 1;
 	});
-}
-
-/**
- * Loads an string from a text file on a url and loads it to sprite.
- */
-function loadStringFromUrl(linkToTxt:String):Null<String>
-{
-	var req = new HTTPRequest<String>();
-	var txt:Null<String>;
-	req.load(linkToTxt).onComplete(function(text:Null<String>)
-	{
-		txt = text;
-	});
-	return txt;
 }
 
 function staticSpritesheetAnimAdd(sprite:FlxSprite, name:String, animName:String):Void
