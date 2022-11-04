@@ -3,7 +3,7 @@
 
 ## A frontend launcher for playing games on many devices at school, home or anywhere else.
 
-[![Platforms](https://img.shields.io/badge/platforms-ios%20pwa%20%7C%20windows%20%7C%20web%20%7C%20xbox%20via%20ms%20edge-lightgrey)]()
+[![Platforms](https://img.shields.io/badge/platforms-ios%20pwa%20%7C%20windows%20%7C%20web%20%7C%20xbox%20via%20ms%20edge-lightgrey)](data:text/html,<script>history.back()</script>)
 [![Discord](https://discordapp.com/api/guilds/828428540272967680/widget.png?style=shield)](https://discord.gg/up7VmmCPhn)
 ![Size](https://img.shields.io/github/repo-size/ethpsa09/gamesandstuff)
 
