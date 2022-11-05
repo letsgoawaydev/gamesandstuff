@@ -16,6 +16,7 @@ import flixel.util.FlxSave;
 import lime.net.HTTPRequest;
 import openfl.display.BitmapData;
 import openfl.ui.Mouse;
+import flixel.system.frontEnds.SoundFrontEnd;
 #if html5 import js.Browser; #end
 
 // Hello fellow developer! Thanks for stopping by.
@@ -110,6 +111,7 @@ class Menu extends FlxState
 
 	override public function create()
 	{
+		// SoundFrontEnd.soundTrayEnabled = false;
 		Mouse.cursor = "arrow";
 		_save.bind("SaveData");
 		if (!(_save.data.lastgameid == null))
@@ -233,13 +235,16 @@ class Menu extends FlxState
 		download.x = 1124;
 		download.y = 557;
 		download.alpha = 0;
+		download.antialiasing = true;
 		add(download);
 		FlxMouseEventManager.add(download);
 		FlxMouseEventManager.setMouseClickCallback(download, downloadClicked); // basically "when playButton clicked -> run playButtonClick function"
 		add(gameCover);
 		gameCover.alpha = 0;
+		gameCover.antialiasing = true;
 		add(gameChar);
 		gameChar.alpha = 0;
+		gameChar.antialiasing = true;
 		add(leftArrow);
 		leftArrow.alpha = 0;
 		add(rightArrow);
@@ -247,11 +252,15 @@ class Menu extends FlxState
 		add(playButton);
 		playButton.alpha = 0;
 		add(platPC);
+
 		platPC.animation.play("pc");
+
 		add(platMobile);
 		platMobile.animation.play("mobile");
+		platMobile.antialiasing = true;
 		add(platGamepad);
 		platGamepad.animation.play("gamepad");
+		platGamepad.antialiasing = true;
 		// text.text = "Hello, World!";
 		// text.font = "Monsterrat";
 		// text.color = FlxColor.WHITE;
@@ -755,10 +764,33 @@ class Menu extends FlxState
 			{
 				uiGrowThingy(leftArrow, 1.15, FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver);
 				uiGrowThingy(rightArrow, 1.15, FlxG.keys.pressed.RIGHT || gamepad_right || rightArrow.mouseOver);
-
+				uiGrowThingy(platGamepad, 1.1, platGamepad.mouseOver);
+				uiGrowThingy(platPC, 1.1, platPC.mouseOver);
+				uiGrowThingy(platMobile, 1.1, platMobile.mouseOver);
 				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
 				{
 					Mouse.cursor = "button";
+				}
+				else if (platPC.mouseOver)
+				{
+					if (currentGameSupportsPC())
+					{
+						Mouse.cursor = "button";
+					}
+				}
+				else if (platMobile.mouseOver)
+				{
+					if (currentGameSupportsMobile())
+					{
+						Mouse.cursor = "button";
+					}
+				}
+				else if (platGamepad.mouseOver)
+				{
+					if (currentGameSupportsGamepad())
+					{
+						Mouse.cursor = "button";
+					}
 				}
 				else
 				{
