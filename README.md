@@ -17,7 +17,7 @@ Games and Stuff is a frontend UI for launching games hosted online. I mainly use
 The main interface. It is written in Haxe using OpenFL and HaxeFlixel.
 It is represented as `launch`.
 ## Build Instructions
-Before building, you'll need to install Haxe. Go to haxe.org/download/ and install it.
+Before building, you'll need to install Haxe. Go to [https://haxe.org/download/](https://haxe.org/download/) and install it.
 
 Once it is installed, open your terminal as admin and write the commands:
 ```
