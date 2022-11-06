@@ -18,12 +18,19 @@ The main interface. It is written in Haxe using OpenFL and HaxeFlixel.
 It is represented as `launch`.
 ## Build Instructions
 Before building, you'll need to install Haxe. Go to haxe.org/download/ and install it.
-Once it is installed, open cmd as admin and write the commands:
+
+Once it is installed, open your terminal as admin and write the commands:
+```
 haxelib install flixel
+
 haxelib install flixel-addons
+
 haxelib install openfl
+
 haxelib install lime
+
 haxelib run lime setup
+```
 
 Then run any of the bat files, then it should work!
 For windows build, make sure you have at least 2GB of space.
