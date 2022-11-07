@@ -713,12 +713,15 @@ class Menu extends FlxState
 		}
 		if (FlxG.keys.justReleased.F)
 		{
-			uiFaderOut();
+			#if html5
+			JsLib.eval("openURL('https://gamesandstuffdevver.letsgoaway.repl.co', false);");
+			#end
 		}
 		if (FlxG.keys.justReleased.D)
 		{
-			var linktoOpen = "google.com";
-			JsLib.eval("");
+			#if html5
+			JsLib.eval("openURL('https://gamesandstuffdevver.letsgoaway.repl.co', true);");
+			#end
 		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{
