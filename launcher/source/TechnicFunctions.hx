@@ -27,7 +27,6 @@ var musicAudio:SoundFrontEnd = FlxG.sound;
 var inputType:String = "Keyboard";
 var music:FlxSound;
 var t:Int;
-var quote = "";
 
 /**
  * sfx shorthand
@@ -153,7 +152,7 @@ function valToString(val:Any):String
 }
 
 /**
- * Loads an image from a url and loads it to sprite.
+ * Loads an image from a url and loads it to a sprites graphic.
  */
 function loadImageFromUrltoSprite(sprite:FlxSprite, imgUrl:String):Void
 {
@@ -203,6 +202,21 @@ function alert(message:Null<String>, ?title:Null<String>):Void
 	#end
 }
 
+/**
+ * Native Windows Alert
+ * 
+ * basically Vbscript Message Box
+ * 
+ * alert types:
+ * 
+ * `error`
+ * 
+ * `question`
+ * 
+ * `warning`
+ * 
+ * `info`
+ */
 function winAlert(message:Null<String>, ?title:Null<String>, ?type:Null<String>)
 {
 	#if windows
@@ -234,9 +248,10 @@ function winAlert(message:Null<String>, ?title:Null<String>, ?type:Null<String>)
 			t = 64;
 		}
 	}
-	var array:Array<String> = [
-		"vbscript:msgbox(" + quote + message + quote + "," + t + "," + quote + title + quote + ")\\close()"
-	];
-	Sys.command("mshta", array);
+	var array:Array<String> = ['vbscript:msgbox("' + message + '",' + t + ',"' + title + '")\\close()'];
+	var p = new sys.io.Process('"C:/Windows/System32/mshta.exe" ' + array[0]);
+	p.close();
+	#else
+	alert(message, title)
 	#end
 }
