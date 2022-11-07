@@ -1,3 +1,7 @@
+#if html5
+import js.Browser;
+import js.Lib in JsLib;
+#end
 import Paths;
 import TechnicFunctions;
 import flixel.FlxG;
@@ -16,11 +20,11 @@ import flixel.util.FlxSave;
 import lime.net.HTTPRequest;
 import openfl.display.BitmapData;
 import openfl.ui.Mouse;
-import flixel.system.frontEnds.SoundFrontEnd;
-#if html5 import js.Browser; #end
 
 // Hello fellow developer! Thanks for stopping by.
 // You can do what ever you want with this code. A credit is encouraged but optional.
+// Also if your on the latest version of VSCode there is a bug that flickers imports
+// so be carful if you are epileptic.
 class Menu extends FlxState
 {
 	/* GAME DATA */
@@ -713,7 +717,8 @@ class Menu extends FlxState
 		}
 		if (FlxG.keys.justReleased.D)
 		{
-			uiFaderIn(0.5);
+			var linktoOpen = "google.com";
+			JsLib.eval("");
 		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{
