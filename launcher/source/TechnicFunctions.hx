@@ -252,6 +252,6 @@ function winAlert(message:Null<String>, ?title:Null<String>, ?type:Null<String>)
 	var p = new sys.io.Process('"C:/Windows/System32/mshta.exe" ' + array[0]);
 	p.close();
 	#else
-	alert(message, title)
+	alert(message, title);
 	#end
 }
