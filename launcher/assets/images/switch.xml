@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="switch.png">
+<SubTexture name="switch on0000" x="0" y="0" width="131" height="64" frameX="0" frameY="0" frameWidth="131" frameHeight="64" />
+<SubTexture name="switch off0000" x="0" y="64" width="131" height="64" frameX="0" frameY="0" frameWidth="131" frameHeight="64" />
+</TextureAtlas>

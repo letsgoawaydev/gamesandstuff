@@ -1,3 +1,4 @@
+
 function openURL(url, hidden) {
     if (hidden === true){
     var windowName = document.querySelectorAll("title")[0].text;

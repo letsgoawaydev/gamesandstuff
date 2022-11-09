@@ -85,7 +85,10 @@ class Menu extends FlxState
 	var fader:FlxExtendedSprite = new FlxExtendedSprite();
 	var faderIn:FlxTween;
 	var faderOut:FlxTween;
-	var text:FlxText = new FlxText();
+	var settingsMenu:FlxExtendedSprite = new FlxExtendedSprite();
+	// Settings Stuffs
+	var set_antiAliasingSwitch = new FlxExtendedSprite();
+	var set_antiAliasingText = new FlxText();
 	// Flixel
 	var gamepad:FlxGamepad;
 	// Booleans
@@ -119,13 +122,14 @@ class Menu extends FlxState
 		// SoundFrontEnd.soundTrayEnabled = false;
 		Mouse.cursor = "arrow";
 		_save.bind("SaveData");
-		if (!(_save.data.lastgameid == null))
+		(_save.data.lastgameid == null) ? (gameID = 0) : (gameID = _save.data.lastgameid);
+		if (_save.data.antialiasing == null)
 		{
-			gameID = _save.data.lastgameid;
+			_save.data.antialiasing = true;
 		}
 		else
 		{
-			gameID = 0;
+			_save.data.antialiasing = false;
 		}
 		_save.data.lastgameid = gameID;
 		#if !mobile
@@ -140,7 +144,6 @@ class Menu extends FlxState
 		title.loadGraphic('assets/images/gamesandstuff.png');
 		title.scale.set(0.5, 0.5);
 		title.screenCenter();
-		title.antialiasing = true;
 		add(title);
 		clicktostart.alpha = 1;
 		clicktostart.loadGraphic('assets/images/clicktostart.png');
@@ -176,7 +179,6 @@ class Menu extends FlxState
 		leftArrow.height += 55;
 		leftArrow.centerOffsets(true);
 		leftArrow.offset.x -= 35;
-		leftArrow.antialiasing = true;
 		FlxMouseEventManager.add(leftArrow);
 		FlxMouseEventManager.setMouseClickCallback(leftArrow, leftArrowClick);
 		rightArrow.loadGraphic('assets/images/triangle.png');
@@ -187,7 +189,6 @@ class Menu extends FlxState
 		rightArrow.height += 55;
 		rightArrow.centerOffsets(true);
 		rightArrow.offset.x -= -45;
-		rightArrow.antialiasing = true;
 		FlxMouseEventManager.add(rightArrow);
 		FlxMouseEventManager.setMouseClickCallback(rightArrow, rightArrowClick);
 		playButton.alpha = 1;
@@ -218,48 +219,35 @@ class Menu extends FlxState
 		platGamepad.y = 398;
 		settingsIcon.loadGraphic(Paths.Images('settings.png'));
 		settingsIcon.screenCenter();
-		settingsIcon.antialiasing = true;
 		settingsIcon.alpha = 0;
 		settingsIcon.x = 1124;
 		settingsIcon.y = 557;
-		FlxMouseEventManager.add(settingsIcon);
-		FlxMouseEventManager.setMouseClickCallback(settingsIcon, settingsIconClicked);
 		add(settingsIcon);
-		FlxG.watch.add(this.settingsIcon, "x", "settingsIcon.x");
-		FlxG.watch.add(this.settingsIcon, "y", "settingsIcon.y");
-		FlxG.watch.add(this.platPC, "x", "platPC.x");
-		FlxG.watch.add(this.platPC, "y", "platPC.y");
-		FlxG.watch.add(this.platMobile, "x", "platMobile.x");
-		FlxG.watch.add(this.platMobile, "y", "platMobile.y");
-		FlxG.watch.add(this.platGamepad, "x", "platGamepad.x");
-		FlxG.watch.add(this.platGamepad, "y", "platGamepad.y");
-		FlxG.watch.add(this.playButton, "x");
-		FlxG.watch.add(this.playButton, "y");
+		FlxG.watch.add(this.settingsMenu, "x", "settingsMenu.x");
+		FlxG.watch.add(this.settingsMenu, "y", "settingsMenu.y");
+		FlxG.watch.add(this.set_antiAliasingSwitch, "x", "set_antiAliasingSwitch.x");
+		FlxG.watch.add(this.set_antiAliasingSwitch, "y", "set_antiAliasingSwitch.y");
+		FlxG.watch.add(this.set_antiAliasingText, "x", "set_antiAliasingText.x");
+		FlxG.watch.add(this.set_antiAliasingText, "y", "set_antiAliasingText.y");
+		FlxG.watch.add(this._save.data, "antialiasing", "antialiasing");
 		FlxG.watch.add(this.gameCover, "x", "gameCover.x");
 		FlxG.watch.add(this.gameCover, "y", "gameCover.y");
 		FlxG.watch.add(this.gameChar, "x", "gameChar.x");
 		FlxG.watch.add(this.gameChar, "y", "gameChar.y");
 		FlxG.watch.add(this, "gameID", "gameID");
 		FlxG.watch.add(this, "currentGame");
-		FlxG.watch.add(this.title, "x", "title.x");
-		FlxG.watch.add(this.title, "y", "title.y");
 		FlxG.watch.add(this.gameStringID, "length", "amount of games");
-		FlxG.watch.add(this.download, "x", "download.x");
-		FlxG.watch.add(this.download, "y", "download.y");
 		download.loadGraphic(Paths.Images('download.png'));
 		download.x = 1124;
 		download.y = 457;
 		download.alpha = 0;
-		download.antialiasing = true;
 		add(download);
 		FlxMouseEventManager.add(download);
 		FlxMouseEventManager.setMouseClickCallback(download, downloadClicked);
 		add(gameCover);
 		gameCover.alpha = 0;
-		gameCover.antialiasing = true;
 		add(gameChar);
 		gameChar.alpha = 0;
-		gameChar.antialiasing = true;
 		add(leftArrow);
 		leftArrow.alpha = 0;
 		add(rightArrow);
@@ -267,27 +255,49 @@ class Menu extends FlxState
 		add(playButton);
 		playButton.alpha = 0;
 		add(platPC);
-
 		platPC.animation.play("pc");
-
 		add(platMobile);
 		platMobile.animation.play("mobile");
-		platMobile.antialiasing = true;
 		add(platGamepad);
 		platGamepad.animation.play("gamepad");
-		platGamepad.antialiasing = true;
-		// text.text = "Hello, World!";
-		// text.font = "Monsterrat";
-		// text.color = FlxColor.WHITE;
-		// text.size = 32;
-		// text.screenCenter();
-		// add(text);
 		fader.makeGraphic(1280, 720, FlxColor.BLACK);
 		fader.screenCenter();
 		fader.alpha = 0;
 		FlxMouseEventManager.add(fader);
 		FlxMouseEventManager.setMouseClickCallback(fader, exitSecondaryMenu);
 		add(fader);
+		settingsMenu.loadGraphic(Paths.Images("settingsMenu.png"));
+		settingsMenu.alpha = 0;
+		settingsMenu.screenCenter();
+		add(settingsMenu);
+		set_antiAliasingSwitch.loadGraphic(Paths.Images("switch.png"));
+		set_antiAliasingSwitch.alpha = 0;
+		set_antiAliasingSwitch.x = 742;
+		set_antiAliasingSwitch.y = 95;
+		TechnicFunctions.spritesheet(set_antiAliasingSwitch, Paths.Images('switch'));
+		TechnicFunctions.staticSpritesheetAnimAdd(set_antiAliasingSwitch, "switch", "on");
+		TechnicFunctions.staticSpritesheetAnimAdd(set_antiAliasingSwitch, "switch", "off");
+		add(set_antiAliasingSwitch);
+		set_antiAliasingText.text = "Antialiasing";
+		set_antiAliasingText.font = "Monsterrat";
+		set_antiAliasingText.color = FlxColor.WHITE;
+		set_antiAliasingText.size = 40;
+		set_antiAliasingText.alpha = 0;
+		add(set_antiAliasingText);
+	}
+
+	function antialiasingSet():Void
+	{
+		title.antialiasing = _save.data.antialiasing;
+		leftArrow.antialiasing = _save.data.antialiasing;
+		rightArrow.antialiasing = _save.data.antialiasing;
+		settingsIcon.antialiasing = _save.data.antialiasing;
+		download.antialiasing = _save.data.antialiasing;
+		gameCover.antialiasing = _save.data.antialiasing;
+		gameChar.antialiasing = _save.data.antialiasing;
+		settingsMenu.antialiasing = _save.data.antialiasing;
+		platMobile.antialiasing = _save.data.antialiasing;
+		platGamepad.antialiasing = _save.data.antialiasing;
 	}
 
 	function uiFaderIn(alphaVal:Float):Void
@@ -305,21 +315,38 @@ class Menu extends FlxState
 		faderOut = FlxTween.tween(fader, {
 			alpha: 0,
 		}, 0.15, {
-			type: FlxTweenType.ONESHOT
+			type: FlxTweenType.ONESHOT,
+			onComplete: canClick
 		});
+	}
+
+	function canClick(?_:FlxTween)
+	{
 		inSecondaryMenu = false;
 	}
 
 	function exitSecondaryMenu(?fader:FlxExtendedSprite):Void
 	{
-		uiFaderOut();
+		if (!(settingsMenu.mouseOver || set_antiAliasingSwitch.mouseOver))
+		{
+			uiFaderOut();
+			_save.flush();
+			settingsMenu.alpha = 0;
+			set_antiAliasingSwitch.alpha = 0;
+			set_antiAliasingText.alpha = 0;
+		}
 	}
 
-	function settingsIconClicked(settingsIcon:FlxExtendedSprite):Void
+	function settingsIconClicked():Void
 	{
 		if (!inSecondaryMenu)
 		{
 			uiFaderIn(0.45);
+			settingsMenu.alpha = 1;
+			set_antiAliasingSwitch.alpha = 1;
+			set_antiAliasingText.alpha = 1;
+			set_antiAliasingText.x = 410;
+			set_antiAliasingText.y = 95;
 		}
 	}
 
@@ -381,6 +408,7 @@ class Menu extends FlxState
 		{
 			platPC.x = 0;
 			platPC.y = 0;
+			mobileInAnim();
 		}
 	}
 
@@ -724,7 +752,7 @@ class Menu extends FlxState
 			gamepad_left = false;
 			gamepad_right = false;
 		}
-		if (FlxG.mouse.pressed)
+		if (FlxG.mouse.justReleased)
 		{
 			mouseDown = true;
 			started = true;
@@ -808,9 +836,17 @@ class Menu extends FlxState
 			uiGrowThingy(settingsIcon, 1.05, !inSecondaryMenu ? (settingsIcon.mouseOver) : false);
 			if (!inSecondaryMenu)
 			{
-				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver || settingsIcon.mouseOver)
+				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
 				{
 					Mouse.cursor = "button";
+				}
+				else if (settingsIcon.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						settingsIconClicked();
+					}
 				}
 				else if (platPC.mouseOver)
 				{
@@ -840,7 +876,18 @@ class Menu extends FlxState
 			}
 			else
 			{
-				Mouse.cursor = "arrow";
+				if (set_antiAliasingSwitch.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						_save.data.antialiasing = !(_save.data.antialiasing);
+					}
+				}
+				else
+				{
+					Mouse.cursor = "arrow";
+				}
 			}
 			if (!menuLoaded)
 			{
@@ -848,6 +895,7 @@ class Menu extends FlxState
 			}
 			if (!clicksoundstarted)
 			{
+				// clickedToStart
 				sound("assets/sounds/click");
 				togglePositions(true);
 				FlxTween.tween(title, {y: 0, "scale.x": 0.3, "scale.y": 0.3}, 0.5, {type: FlxTweenType.PERSIST, onComplete: buttonClickFixFunc});
@@ -866,7 +914,7 @@ class Menu extends FlxState
 			// title.scale.set(titlesize, titlesize);
 			// }
 			// }
-			TechnicFunctions.checkForFullScreenToggle();
+
 			if (!maxClickAlpha) // fade out animation for the "click to start" text. smexy ui = smooth experience. (hopefully)
 			{
 				if (!(clicktostart.alpha == 0))
@@ -886,5 +934,18 @@ class Menu extends FlxState
 			platMobile.alpha = 0;
 			platGamepad.alpha = 0;
 		}
+		if (settingsMenu.alpha == 1)
+		{
+			if (_save.data.antialiasing)
+			{
+				set_antiAliasingSwitch.animation.play('on');
+			}
+			else
+			{
+				set_antiAliasingSwitch.animation.play('off');
+			}
+		}
+		TechnicFunctions.checkForFullScreenToggle();
+		antialiasingSet();
 	}
 }
