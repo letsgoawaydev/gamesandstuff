@@ -116,14 +116,23 @@ class Menu extends FlxState
 	// Other
 	var s:FlxSound;
 	var download:FlxExtendedSprite = new FlxExtendedSprite();
+	var set_windowSwitch:FlxExtendedSprite = new FlxExtendedSprite();
+	var set_windowText:FlxText = new FlxText();
 
 	override public function create()
 	{
 		// SoundFrontEnd.soundTrayEnabled = false;
 		Mouse.cursor = "arrow";
-		_save.bind("SaveData");
-		(_save.data.lastgameid == null) ? (gameID = 0) : (gameID = _save.data.lastgameid);
-		if (_save.data.antialiasing == null)
+		_save.bind("settingsData");
+		if (_save.data.lastgameid == null)
+		{
+			gameID = 0;
+		}
+		else
+		{
+			gameID = _save.data.lastgameid;
+		}
+		if ((_save.data.antialiasing != true) || (_save.data.antialiasing != false))
 		{
 			_save.data.antialiasing = true;
 		}
@@ -131,7 +140,16 @@ class Menu extends FlxState
 		{
 			_save.data.antialiasing = false;
 		}
+		if ((_save.data.openInWindow != true) || (_save.data.openInWindow != false))
+		{
+			_save.data.openInWindow = true;
+		}
+		else
+		{
+			_save.data.openInWindow = false;
+		}
 		_save.data.lastgameid = gameID;
+		_save.flush();
 		#if !mobile
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = true;
@@ -270,7 +288,6 @@ class Menu extends FlxState
 		settingsMenu.alpha = 0;
 		settingsMenu.screenCenter();
 		add(settingsMenu);
-		set_antiAliasingSwitch.loadGraphic(Paths.Images("switch.png"));
 		set_antiAliasingSwitch.alpha = 0;
 		set_antiAliasingSwitch.x = 742;
 		set_antiAliasingSwitch.y = 95;
@@ -283,6 +300,23 @@ class Menu extends FlxState
 		set_antiAliasingText.color = FlxColor.WHITE;
 		set_antiAliasingText.size = 40;
 		set_antiAliasingText.alpha = 0;
+		set_antiAliasingText.x = 410;
+		set_antiAliasingText.y = 95;
+		add(set_antiAliasingText);
+		set_windowSwitch.alpha = 0;
+		set_windowSwitch.x = 742;
+		set_windowSwitch.y = 150;
+		TechnicFunctions.spritesheet(set_windowSwitch, Paths.Images('switch'));
+		TechnicFunctions.staticSpritesheetAnimAdd(set_windowSwitch, "switch", "on");
+		TechnicFunctions.staticSpritesheetAnimAdd(set_windowSwitch, "switch", "off");
+		add(set_windowSwitch);
+		set_windowText.text = "Open Game In Window";
+		set_windowText.font = "Monsterrat";
+		set_windowText.color = FlxColor.WHITE;
+		set_windowText.size = 40;
+		set_windowText.alpha = 0;
+		set_windowText.x = 410;
+		set_windowText.y = 150;
 		add(set_antiAliasingText);
 	}
 
@@ -334,6 +368,8 @@ class Menu extends FlxState
 			settingsMenu.alpha = 0;
 			set_antiAliasingSwitch.alpha = 0;
 			set_antiAliasingText.alpha = 0;
+			// set_windowText.alpha = 0;
+			// set_windowSwitch.alpha = 0;
 		}
 	}
 
@@ -345,8 +381,8 @@ class Menu extends FlxState
 			settingsMenu.alpha = 1;
 			set_antiAliasingSwitch.alpha = 1;
 			set_antiAliasingText.alpha = 1;
-			set_antiAliasingText.x = 410;
-			set_antiAliasingText.y = 95;
+			// set_windowText.alpha = 1;
+			// set_windowSwitch.alpha = 1;
 		}
 	}
 
@@ -571,6 +607,11 @@ class Menu extends FlxState
 		}
 	}
 
+	function goToGame(?_:Bool):Void
+	{
+		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + gameLinkEndTags[gameID]);
+	}
+
 	function playButtonClick(playButton:FlxExtendedSprite):Void
 	{
 		if (!inSecondaryMenu)
@@ -580,7 +621,8 @@ class Menu extends FlxState
 				if (playButton.mouseOver)
 				{
 					sound("assets/sounds/play");
-					redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + gameLinkEndTags[gameID]);
+					_save.data.lastgameid = gameID;
+					_save.flush(0, goToGame);
 				}
 			}
 		}
@@ -824,7 +866,6 @@ class Menu extends FlxState
 			}
 		}
 
-		_save.data.lastgameid = gameID;
 		if (started)
 		{
 			uiGrowThingy(leftArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver) : false);
@@ -943,6 +984,14 @@ class Menu extends FlxState
 			else
 			{
 				set_antiAliasingSwitch.animation.play('off');
+			}
+			if (_save.data.openInWindow)
+			{
+				set_windowSwitch.animation.play('on');
+			}
+			else
+			{
+				set_windowSwitch.animation.play('off');
 			}
 		}
 		TechnicFunctions.checkForFullScreenToggle();
