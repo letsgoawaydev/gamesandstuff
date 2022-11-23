@@ -156,12 +156,10 @@ function valToString(val:Any):String
  */
 function loadImageFromUrltoSprite(sprite:FlxSprite, imgUrl:String):Void
 {
-	sprite.alpha = 0;
 	var req = new HTTPRequest<BitmapData>();
 	req.load(imgUrl).onComplete(function(image)
 	{
 		sprite.loadGraphic(image);
-		sprite.alpha = 1;
 	});
 }
 

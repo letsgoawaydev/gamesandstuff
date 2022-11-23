@@ -21,6 +21,15 @@ import lime.net.HTTPRequest;
 import openfl.display.BitmapData;
 import openfl.ui.Mouse;
 
+enum MenuType
+{
+	main;
+	settings;
+	controlsPC;
+	controlsGamepad;
+	controlsMobile;
+}
+
 // Hello fellow developer! Thanks for stopping by.
 // You can do what ever you want with this code. A credit is encouraged but optional.
 // Also if your on the latest version of VSCode there is a bug that flickers imports
@@ -77,6 +86,8 @@ class Menu extends FlxState
 	var platMobile:FlxExtendedSprite = new FlxExtendedSprite();
 	var platGamepad:FlxExtendedSprite = new FlxExtendedSprite();
 	var settingsIcon:FlxExtendedSprite = new FlxExtendedSprite();
+	var settingsMenu:FlxExtendedSprite = new FlxExtendedSprite();
+	var controls:FlxExtendedSprite = new FlxExtendedSprite();
 	var coverFadeIn:FlxTween;
 	var charFadeIn:FlxTween;
 	var pcIn:FlxTween;
@@ -85,10 +96,12 @@ class Menu extends FlxState
 	var fader:FlxExtendedSprite = new FlxExtendedSprite();
 	var faderIn:FlxTween;
 	var faderOut:FlxTween;
-	var settingsMenu:FlxExtendedSprite = new FlxExtendedSprite();
+
 	// Settings Stuffs
 	var set_antiAliasingSwitch = new FlxExtendedSprite();
 	var set_antiAliasingText = new FlxText();
+	var set_windowSwitch:FlxExtendedSprite = new FlxExtendedSprite();
+	var set_windowText:FlxText = new FlxText();
 	// Flixel
 	var gamepad:FlxGamepad;
 	// Booleans
@@ -109,6 +122,7 @@ class Menu extends FlxState
 	// Strings
 	var currentGame:String = "";
 	var fontFix:String = "";
+
 	#if html5
 	var website:String = Browser.window.location.href;
 	var browserwindow = Browser.window;
@@ -116,8 +130,8 @@ class Menu extends FlxState
 	// Other
 	var s:FlxSound;
 	var download:FlxExtendedSprite = new FlxExtendedSprite();
-	var set_windowSwitch:FlxExtendedSprite = new FlxExtendedSprite();
-	var set_windowText:FlxText = new FlxText();
+	var loading:Bool = false;
+	var menuType:EnumValue = main;
 
 	override public function create()
 	{
@@ -318,6 +332,10 @@ class Menu extends FlxState
 		set_windowText.x = 410;
 		set_windowText.y = 150;
 		add(set_antiAliasingText);
+		controls.loadGraphic(Paths.Images("spinner.png"));
+		controls.alpha = 0;
+		controls.antialiasing = _save.data.antialiasing;
+		add(controls);
 	}
 
 	function antialiasingSet():Void
@@ -332,6 +350,7 @@ class Menu extends FlxState
 		settingsMenu.antialiasing = _save.data.antialiasing;
 		platMobile.antialiasing = _save.data.antialiasing;
 		platGamepad.antialiasing = _save.data.antialiasing;
+		controls.antialiasing = _save.data.antialiasing;
 	}
 
 	function uiFaderIn(alphaVal:Float):Void
@@ -357,24 +376,39 @@ class Menu extends FlxState
 	function canClick(?_:FlxTween)
 	{
 		inSecondaryMenu = false;
+		menuType = main;
 	}
 
 	function exitSecondaryMenu(?fader:FlxExtendedSprite):Void
 	{
-		if (!(settingsMenu.mouseOver || set_antiAliasingSwitch.mouseOver))
+		if (menuType == settings)
 		{
-			uiFaderOut();
-			_save.flush();
-			settingsMenu.alpha = 0;
-			set_antiAliasingSwitch.alpha = 0;
-			set_antiAliasingText.alpha = 0;
-			// set_windowText.alpha = 0;
-			// set_windowSwitch.alpha = 0;
+			if (!(settingsMenu.mouseOver || set_antiAliasingSwitch.mouseOver))
+			{
+				uiFaderOut();
+				_save.flush();
+				settingsMenu.alpha = 0;
+				set_antiAliasingSwitch.alpha = 0;
+				set_antiAliasingText.alpha = 0;
+
+				// set_windowText.alpha = 0;
+				// set_windowSwitch.alpha = 0;
+			}
+		}
+		else if (menuType == controlsPC || menuType == controlsGamepad || menuType == controlsMobile)
+		{
+			if (!(controls.mouseOver))
+			{
+				uiFaderOut();
+				loading = false;
+				controls.alpha = 0;
+			}
 		}
 	}
 
 	function settingsIconClicked():Void
 	{
+		menuType = settings;
 		if (!inSecondaryMenu)
 		{
 			uiFaderIn(0.45);
@@ -614,18 +648,48 @@ class Menu extends FlxState
 
 	function playButtonClick(playButton:FlxExtendedSprite):Void
 	{
-		if (!inSecondaryMenu)
+		if (!inSecondaryMenu && startButtonFix && playButton.mouseOver)
 		{
-			if (startButtonFix)
-			{
-				if (playButton.mouseOver)
-				{
-					sound("assets/sounds/play");
-					_save.data.lastgameid = gameID;
-					_save.flush(0, goToGame);
-				}
-			}
+			sound("assets/sounds/play");
+			_save.data.lastgameid = gameID;
+			_save.flush(0, goToGame);
 		}
+	}
+
+	function pcControlsMenu():Void
+	{
+		#if !html5
+		menuType = controlsPC;
+		uiFaderIn(0.45);
+		loading = true;
+		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png");
+		#else
+		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png");
+		#end
+	}
+
+	function mobileControlsMenu():Void
+	{
+		#if !html5
+		menuType = controlsMobile;
+		uiFaderIn(0.45);
+		loading = true;
+		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png");
+		#else
+		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png");
+		#end
+	}
+
+	function gamepadControlsMenu():Void
+	{
+		#if !html5
+		menuType = controlsGamepad;
+		uiFaderIn(0.45);
+		loading = true;
+		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png");
+		#else
+		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png");
+		#end
 	}
 
 	function fadeChar(?_:FlxTween):Void
@@ -749,7 +813,7 @@ class Menu extends FlxState
 		super.update(elapsed);
 		currentGame = gameStringID[gameID];
 		gamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null)
+		if (gamepad != null && !inSecondaryMenu)
 		{
 			if (gamepad.justReleased.DPAD_LEFT)
 			{
@@ -805,7 +869,7 @@ class Menu extends FlxState
 		}
 		if (FlxG.keys.justReleased.LEFT)
 		{
-			if (started)
+			if (started && !inSecondaryMenu)
 			{
 				leftArrowClick();
 			}
@@ -824,14 +888,14 @@ class Menu extends FlxState
 		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{
-			if (started)
+			if (started && !inSecondaryMenu)
 			{
 				rightArrowClick();
 			}
 		}
 		if (FlxG.keys.justReleased.ENTER || FlxG.keys.justReleased.SPACE)
 		{
-			if (started)
+			if (started && !inSecondaryMenu)
 			{
 				playButtonClick(playButton);
 				_save.flush();
@@ -895,6 +959,11 @@ class Menu extends FlxState
 					{
 						Mouse.cursor = "button";
 					}
+					if (FlxG.mouse.justReleased)
+					{
+						pcControlsMenu();
+						controls.loadGraphic(Paths.Images("spinner.png"));
+					}
 				}
 				else if (platMobile.mouseOver)
 				{
@@ -902,12 +971,22 @@ class Menu extends FlxState
 					{
 						Mouse.cursor = "button";
 					}
+					if (FlxG.mouse.justReleased)
+					{
+						mobileControlsMenu();
+						controls.loadGraphic(Paths.Images("spinner.png"));
+					}
 				}
 				else if (platGamepad.mouseOver)
 				{
 					if (currentGameSupportsGamepad())
 					{
 						Mouse.cursor = "button";
+					}
+					if (FlxG.mouse.justReleased)
+					{
+						gamepadControlsMenu();
+						controls.loadGraphic(Paths.Images("spinner.png"));
 					}
 				}
 				else
@@ -994,6 +1073,27 @@ class Menu extends FlxState
 				set_windowSwitch.animation.play('off');
 			}
 		}
+
+		if (loading)
+		{
+			if (controls.width == 64 && controls.height == 64)
+			{
+				controls.angle = (controls.angle + 10) % 360;
+			}
+			else if (controls.width == 0 && controls.height == 0)
+			{
+				winAlert("The image failed to load.\nYou are not connected to the internet, or we stuffed something up.\nIn that case, let us know at https://discord.com/invite/up7VmmCPhn.",
+					"Error", "error");
+			}
+			else
+			{
+				loading = false;
+				controls.angle = 0;
+			}
+			controls.screenCenter();
+			controls.alpha = 1;
+		}
+
 		TechnicFunctions.checkForFullScreenToggle();
 		antialiasingSet();
 	}
