@@ -32,10 +32,22 @@ enum MenuType
 
 // Hello fellow developer! Thanks for stopping by.
 // You can do what ever you want with this code. A credit is encouraged but optional.
-// Also if your on the latest version of VSCode there is a bug that flickers imports
-// so be carful if you are epileptic.
 class Menu extends FlxState
 {
+	var version:Array<Int> = [2, 0, 0];
+	#if html5
+	var platform:String = "web";
+	#else
+	#if windows
+	var platform:String = "windows";
+	#else
+	#if linux
+	var platform:String = "linux";
+	#else
+	var platform:String = "unknown";
+	#end
+	#end
+	#end
 	/* GAME DATA */
 	/* CHANGE THESE VALUES */
 	var gameStringID:Array<String> = [
@@ -102,6 +114,7 @@ class Menu extends FlxState
 	var set_antiAliasingText = new FlxText();
 	var set_windowSwitch:FlxExtendedSprite = new FlxExtendedSprite();
 	var set_windowText:FlxText = new FlxText();
+	var versionText:FlxText = new FlxText();
 	// Flixel
 	var gamepad:FlxGamepad;
 	// Booleans
@@ -255,12 +268,6 @@ class Menu extends FlxState
 		settingsIcon.x = 1124;
 		settingsIcon.y = 557;
 		add(settingsIcon);
-		FlxG.watch.add(this.settingsMenu, "x", "settingsMenu.x");
-		FlxG.watch.add(this.settingsMenu, "y", "settingsMenu.y");
-		FlxG.watch.add(this.set_antiAliasingSwitch, "x", "set_antiAliasingSwitch.x");
-		FlxG.watch.add(this.set_antiAliasingSwitch, "y", "set_antiAliasingSwitch.y");
-		FlxG.watch.add(this.set_antiAliasingText, "x", "set_antiAliasingText.x");
-		FlxG.watch.add(this.set_antiAliasingText, "y", "set_antiAliasingText.y");
 		FlxG.watch.add(this._save.data, "antialiasing", "antialiasing");
 		FlxG.watch.add(this.gameCover, "x", "gameCover.x");
 		FlxG.watch.add(this.gameCover, "y", "gameCover.y");
@@ -336,6 +343,18 @@ class Menu extends FlxState
 		controls.alpha = 0;
 		controls.antialiasing = _save.data.antialiasing;
 		add(controls);
+		#if debug
+		versionText.text = "cut-v" + version[0] + "." + version[1] + "." + version[2] + " (Debug Build)\n" + platform;
+		#else
+		versionText.text = "cut-v" + version[0] + "." + version[1] + "." + version[2] + "\n" + platform;
+		#end
+		versionText.font = "Monsterrat";
+		versionText.color = FlxColor.WHITE;
+		versionText.size = 15;
+		versionText.alpha = 0.5;
+		versionText.x = 5;
+		versionText.y = 0;
+		add(versionText);
 	}
 
 	function antialiasingSet():Void
@@ -390,7 +409,6 @@ class Menu extends FlxState
 				settingsMenu.alpha = 0;
 				set_antiAliasingSwitch.alpha = 0;
 				set_antiAliasingText.alpha = 0;
-
 				// set_windowText.alpha = 0;
 				// set_windowSwitch.alpha = 0;
 			}
@@ -427,7 +445,7 @@ class Menu extends FlxState
 			downloadTimesClicked++;
 			if (downloadTimesClicked == 1)
 			{
-				alert("This will download the latest version of the games and stuff launcher. It is only availible for Windows and does not work on iPad. \nFor iPad users, click the share button and click on Add to Home Screen. \nClick the download button again to download the launcher for windows. Drag the file to your desktop for easy access and double click to run.\nIf a menu shows up saying \"Do you want to run?\", turn off Always Ask before opening this file and click run. \nDownload menu coming soon.");
+				alert("This will download the latest version of the games and stuff shortcut. It is only availible for Windows and does not work on iPad. \nFor iPad users, click the share button and click on Add to Home Screen. \nClick the download button again to download the launcher for windows. Drag the file to your desktop for easy access and double click to run.\nIf a menu shows up saying \"Do you want to run?\", turn off Always Ask before opening this file and click run. \nDownload menu coming soon.");
 			}
 			else
 			{
@@ -664,7 +682,7 @@ class Menu extends FlxState
 		loading = true;
 		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png");
 		#else
-		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png");
+		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png', true, 'PC Controls')");
 		#end
 	}
 
@@ -676,7 +694,7 @@ class Menu extends FlxState
 		loading = true;
 		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png");
 		#else
-		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png");
+		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png', true, 'Mobile Controls')");
 		#end
 	}
 
@@ -688,7 +706,7 @@ class Menu extends FlxState
 		loading = true;
 		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png");
 		#else
-		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png");
+		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png', true, 'Gamepad Controls')");
 		#end
 	}
 
