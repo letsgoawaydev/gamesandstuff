@@ -34,6 +34,7 @@ enum MenuType
 // You can do what ever you want with this code. A credit is encouraged but optional.
 class Menu extends FlxState
 {
+	/* VERSION */
 	var version:Array<Int> = [2, 0, 0];
 	#if html5
 	var platform:String = "web";
@@ -100,6 +101,8 @@ class Menu extends FlxState
 	var settingsIcon:FlxExtendedSprite = new FlxExtendedSprite();
 	var settingsMenu:FlxExtendedSprite = new FlxExtendedSprite();
 	var controls:FlxExtendedSprite = new FlxExtendedSprite();
+	var discord:FlxExtendedSprite = new FlxExtendedSprite();
+	// Tweens
 	var coverFadeIn:FlxTween;
 	var charFadeIn:FlxTween;
 	var pcIn:FlxTween;
@@ -283,6 +286,11 @@ class Menu extends FlxState
 		add(download);
 		FlxMouseEventManager.add(download);
 		FlxMouseEventManager.setMouseClickCallback(download, downloadClicked);
+		discord.loadGraphic(Paths.Images('discord.png'));
+		discord.x = 1014;
+		discord.y = 560;
+		discord.alpha = 0;
+		add(discord);
 		add(gameCover);
 		gameCover.alpha = 0;
 		add(gameChar);
@@ -344,9 +352,9 @@ class Menu extends FlxState
 		controls.antialiasing = _save.data.antialiasing;
 		add(controls);
 		#if debug
-		versionText.text = "cut-v" + version[0] + "." + version[1] + "." + version[2] + " (Debug Build)\n" + platform;
+		versionText.text = "launch-v" + version[0] + "." + version[1] + "." + version[2] + " (Debug Build)\n" + platform;
 		#else
-		versionText.text = "cut-v" + version[0] + "." + version[1] + "." + version[2] + "\n" + platform;
+		versionText.text = "launch-v" + version[0] + "." + version[1] + "." + version[2] + "\n" + platform;
 		#end
 		versionText.font = "Monsterrat";
 		versionText.color = FlxColor.WHITE;
@@ -355,6 +363,14 @@ class Menu extends FlxState
 		versionText.x = 5;
 		versionText.y = 0;
 		add(versionText);
+	}
+
+	function discordClicked(?_:FlxExtendedSprite)
+	{
+		if (!inSecondaryMenu)
+		{
+			redirect("https://discord.gg/up7VmmCPhn");
+		}
 	}
 
 	function antialiasingSet():Void
@@ -370,6 +386,7 @@ class Menu extends FlxState
 		platMobile.antialiasing = _save.data.antialiasing;
 		platGamepad.antialiasing = _save.data.antialiasing;
 		controls.antialiasing = _save.data.antialiasing;
+		discord.antialiasing = _save.data.antialiasing;
 	}
 
 	function uiFaderIn(alphaVal:Float):Void
@@ -957,11 +974,20 @@ class Menu extends FlxState
 			uiGrowThingy(platMobile, 1.1, !inSecondaryMenu ? (platMobile.mouseOver) : false);
 			uiGrowThingy(download, 1.05, !inSecondaryMenu ? (download.mouseOver) : false);
 			uiGrowThingy(settingsIcon, 1.05, !inSecondaryMenu ? (settingsIcon.mouseOver) : false);
+			uiGrowThingy(discord, 1.05, !inSecondaryMenu ? (discord.mouseOver) : false);
 			if (!inSecondaryMenu)
 			{
 				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
 				{
 					Mouse.cursor = "button";
+				}
+				else if (discord.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						discordClicked();
+					}
 				}
 				else if (settingsIcon.mouseOver)
 				{
@@ -1043,6 +1069,7 @@ class Menu extends FlxState
 				playButton.alpha = 1;
 				download.alpha = 1;
 				settingsIcon.alpha = 1;
+				discord.alpha = 1;
 			}
 			// else
 			// {
