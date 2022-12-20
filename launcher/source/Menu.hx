@@ -94,6 +94,8 @@ class Menu extends FlxState
 	var gameChar:FlxSprite = new FlxSprite();
 	var leftArrow:FlxExtendedSprite = new FlxExtendedSprite();
 	var rightArrow:FlxExtendedSprite = new FlxExtendedSprite();
+	var selLeftArrow:FlxExtendedSprite = new FlxExtendedSprite();
+	var selRightArrow:FlxExtendedSprite = new FlxExtendedSprite();
 	var playButton:FlxExtendedSprite = new FlxExtendedSprite();
 	var platPC:FlxExtendedSprite = new FlxExtendedSprite();
 	var platMobile:FlxExtendedSprite = new FlxExtendedSprite();
