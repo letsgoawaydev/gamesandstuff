@@ -1,0 +1,18 @@
+{
+  "stringID": "minecraft",
+  "url": "https://mceagler.letsgoaway.repl.co",
+  "urlEndTag": "/",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -232,
+    "y": -116
+  },
+  "gameChar": {
+    "x": 11,
+    "y": -99
+  }
+}

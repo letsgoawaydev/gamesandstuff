@@ -1,0 +1,18 @@
+{
+  "stringID": "superhot",
+  "url": "https://superhot.letsgoaway.repl.co",
+  "urlEndTag": "/",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -170,
+    "y": -92
+  },
+  "gameChar": {
+    "x": 29,
+    "y": -100
+  }
+}

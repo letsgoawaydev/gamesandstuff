@@ -1,3 +1,5 @@
+import openfl.utils.Assets;
+import haxe.Json;
 #if html5
 import js.Browser;
 import js.Lib in JsLib;
@@ -51,45 +53,16 @@ class Menu extends FlxState
 	#end
 	/* GAME DATA */
 	/* CHANGE THESE VALUES */
-	var gameStringID:Array<String> = [
-		'sm64pcport',
-		'superhot',
-		'subwaySurfers',
-		'doomjscompressed',
-		'doomjscompressed',
-		'half-life',
-		'mcEagler',
-		'mari0'
-	];
-	var gameSupportsPlatforms:Array<Array<Bool>> = [
-		// PC  Mobile Gamepad
-		[true, false, true],
-		[true, false, false],
-		[true, true, false],
-		[true, true, false],
-		[true, true, false],
-		[true, false, false],
-		[true, false, false],
-		[true, false, false]
-	];
-	var gameLinkEndTags:Array<String> = [
-		'/',
-		'/',
-		'/',
-		'/?bundleUrl=/d?anonymous=1',
-		'/?bundleUrl=/d2?anonymous=1',
-		'/',
-		'/',
-		'/'
-	];
+	var gameData:Dynamic;
+
 	/* */
 	var gameDevImagePaths:Array<String> = [""];
 	var gameID:Int = 0;
+	var gameAmount:Int = 0;
 	var _save:FlxSave = new FlxSave();
 	// UI
 	var title:FlxSprite = new FlxSprite();
 	var clicktostart:FlxSprite = new FlxSprite();
-	var bg:FlxSprite = new FlxSprite();
 	var gameCover:FlxSprite = new FlxSprite();
 	var gameChar:FlxSprite = new FlxSprite();
 	var leftArrow:FlxExtendedSprite = new FlxExtendedSprite();
@@ -124,7 +97,6 @@ class Menu extends FlxState
 	var gamepad:FlxGamepad;
 	// Booleans
 	var started:Bool = false;
-	var menuLoaded:Bool = false;
 	var maxClickAlpha:Bool = false;
 	var clicksoundstarted:Bool = false;
 	var mouseDown:Bool;
@@ -139,7 +111,6 @@ class Menu extends FlxState
 	var downloadTimesClicked:Int = 0;
 	// Strings
 	var currentGame:String = "";
-	var fontFix:String = "";
 
 	#if html5
 	var website:String = Browser.window.location.href;
@@ -188,7 +159,6 @@ class Menu extends FlxState
 		#end
 		FlxG.autoPause = false;
 		bgColor = 0;
-		FlxMouseEventManager.add(bg);
 		super.create();
 		title.alpha = 1;
 		title.loadGraphic('assets/images/gamesandstuff.png');
@@ -201,23 +171,22 @@ class Menu extends FlxState
 		clicktostart.screenCenter();
 		clicktostart.y += 85;
 		add(clicktostart);
-		TechnicFunctions.spritesheet(gameCover, Paths.Images('gameCovers'));
-		var i:Int = 0;
-		for (gameName in gameStringID)
+		var endOfList = false;
+		while (endOfList == false)
 		{
-			TechnicFunctions.staticSpritesheetAnimAdd(gameCover, "gameCovers", i + "game");
-			i++;
+			if (!(Assets.exists(Paths.Data("games/" + gameAmount + "/data.json"))))
+			{
+				endOfList = true;
+			}
+			else
+			{
+				gameAmount++;
+			}
 		}
 		gameCover.x = -283;
 		gameCover.y = -146;
 		gameCover.scale.set(0.25, 0.25);
-		TechnicFunctions.spritesheet(gameChar, Paths.Images('characters'));
-		var i:Int = 0;
-		for (gameName in gameStringID)
-		{
-			TechnicFunctions.staticSpritesheetAnimAdd(gameChar, "characters", i + "game");
-			i++;
-		}
+
 		gameChar.x = 57;
 		gameChar.y = -100;
 		gameChar.scale.set(0.4, 0.4);
@@ -229,8 +198,7 @@ class Menu extends FlxState
 		leftArrow.height += 55;
 		leftArrow.centerOffsets(true);
 		leftArrow.offset.x -= 35;
-		FlxMouseEventManager.add(leftArrow);
-		FlxMouseEventManager.setMouseClickCallback(leftArrow, leftArrowClick);
+
 		rightArrow.loadGraphic('assets/images/triangle.png');
 		rightArrow.alpha = 1;
 		rightArrow.angle = 45;
@@ -239,21 +207,13 @@ class Menu extends FlxState
 		rightArrow.height += 55;
 		rightArrow.centerOffsets(true);
 		rightArrow.offset.x -= -45;
-		FlxMouseEventManager.add(rightArrow);
-		FlxMouseEventManager.setMouseClickCallback(rightArrow, rightArrowClick);
+
 		playButton.alpha = 1;
 		playButton.loadGraphic('assets/images/play.png');
 		playButton.scale.set(0.5069420, 0.5069420); // funni moment AMO-*vine boom* x1 x2 x1000000
 		playButton.updateHitbox();
 		playButton.screenCenter(X);
 		playButton.y = 522.292;
-		FlxMouseEventManager.add(playButton);
-		FlxMouseEventManager.setMouseClickCallback(playButton, playButtonClick); // basically "when playButton clicked -> run playButtonClick function"
-		#if html5
-		fontFix = "assets/fonts/FuturaWeb.woff";
-		#else
-		fontFix = "assets/fonts/Futura.ttf";
-		#end
 		TechnicFunctions.spritesheet(platPC, Paths.Images('platforms'));
 		TechnicFunctions.staticSpritesheetAnimAdd(platPC, "platforms", "pc");
 		platPC.x = 207;
@@ -275,19 +235,18 @@ class Menu extends FlxState
 		add(settingsIcon);
 		FlxG.watch.add(this._save.data, "antialiasing", "antialiasing");
 		FlxG.watch.add(this.gameCover, "x", "gameCover.x");
+		FlxG.watch.add(this, "gameAmount");
 		FlxG.watch.add(this.gameCover, "y", "gameCover.y");
 		FlxG.watch.add(this.gameChar, "x", "gameChar.x");
 		FlxG.watch.add(this.gameChar, "y", "gameChar.y");
 		FlxG.watch.add(this, "gameID", "gameID");
 		FlxG.watch.add(this, "currentGame");
-		FlxG.watch.add(this.gameStringID, "length", "amount of games");
 		download.loadGraphic(Paths.Images('download.png'));
 		download.x = 1124;
 		download.y = 457;
 		download.alpha = 0;
 		add(download);
-		FlxMouseEventManager.add(download);
-		FlxMouseEventManager.setMouseClickCallback(download, downloadClicked);
+
 		discord.loadGraphic(Paths.Images('discord.png'));
 		discord.x = 1014;
 		discord.y = 560;
@@ -312,8 +271,6 @@ class Menu extends FlxState
 		fader.makeGraphic(1280, 720, FlxColor.BLACK);
 		fader.screenCenter();
 		fader.alpha = 0;
-		FlxMouseEventManager.add(fader);
-		FlxMouseEventManager.setMouseClickCallback(fader, exitSecondaryMenu);
 		add(fader);
 		settingsMenu.loadGraphic(Paths.Images("settingsMenu.png"));
 		settingsMenu.alpha = 0;
@@ -475,17 +432,17 @@ class Menu extends FlxState
 
 	function currentGameSupportsPC():Bool
 	{
-		return gameSupportsPlatforms[gameID][0];
+		return gameData.platforms.pc;
 	}
 
 	function currentGameSupportsMobile():Bool
 	{
-		return gameSupportsPlatforms[gameID][1];
+		return gameData.platforms.mobile;
 	}
 
 	function currentGameSupportsGamepad():Bool
 	{
-		return gameSupportsPlatforms[gameID][2];
+		return gameData.platforms.gamepad;
 	}
 
 	function triggerPlatforms():Void
@@ -655,13 +612,13 @@ class Menu extends FlxState
 		{
 			if (gameID == 0)
 			{
-				gameID = gameStringID.length - 1;
+				gameID = gameAmount - 1;
 			}
 			else
 			{
 				gameID--;
 			}
-			gameID = gameID % gameStringID.length;
+			gameID = gameID % gameAmount;
 			togglePositions();
 			sound("assets/sounds/left");
 		}
@@ -673,14 +630,14 @@ class Menu extends FlxState
 		{
 			sound("assets/sounds/right");
 			gameID++;
-			gameID = gameID % gameStringID.length;
+			gameID = gameID % gameAmount;
 			togglePositions();
 		}
 	}
 
 	function goToGame(?_:Bool):Void
 	{
-		redirect("https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + gameLinkEndTags[gameID]);
+		redirect(gameData.url + gameData.urlEndTag);
 	}
 
 	function playButtonClick(playButton:FlxExtendedSprite):Void
@@ -689,7 +646,7 @@ class Menu extends FlxState
 		{
 			sound("assets/sounds/play");
 			_save.data.lastgameid = gameID;
-			_save.flush(0, goToGame);
+			goToGame(_save.flush(0));
 		}
 	}
 
@@ -699,9 +656,9 @@ class Menu extends FlxState
 		menuType = controlsPC;
 		uiFaderIn(0.45);
 		loading = true;
-		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png");
+		loadImageFromUrltoSprite(gameData.url + "/gasDATA/pc.png");
 		#else
-		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/pc.png', true, 'PC Controls')");
+		JsLib.eval("openURL('" + gameData.url + "/gasDATA/pc.png', true, 'PC Controls')");
 		#end
 	}
 
@@ -711,9 +668,9 @@ class Menu extends FlxState
 		menuType = controlsMobile;
 		uiFaderIn(0.45);
 		loading = true;
-		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png");
+		loadImageFromUrltoSprite(controls, gameData.url + "/gasDATA/mobile.png");
 		#else
-		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/mobile.png', true, 'Mobile Controls')");
+		JsLib.eval("openURL('" + gameData.url + "/gasDATA/mobile.png', true, 'Mobile Controls')");
 		#end
 	}
 
@@ -723,9 +680,9 @@ class Menu extends FlxState
 		menuType = controlsGamepad;
 		uiFaderIn(0.45);
 		loading = true;
-		loadImageFromUrltoSprite(controls, "https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png");
+		loadImageFromUrltoSprite(controls, gameData.url + "/gasDATA/gamepad.png");
 		#else
-		JsLib.eval("openURL('https://" + gameStringID[gameID] + ".letsgoaway.repl.co" + "/gasDATA/gamepad.png', true, 'Gamepad Controls')");
+		JsLib.eval("openURL('" + gameData.url + "/gasDATA/gamepad.png', true, 'Gamepad Controls')");
 		#end
 	}
 
@@ -752,9 +709,12 @@ class Menu extends FlxState
 
 	function togglePositions(?dontDoFades:Bool):Void
 	{
+		gameData = Json.parse(Assets.getText(Paths.Data("games/" + gameID + "/data.json")));
+		currentGame = gameData.stringID;
 		gameCover.alpha = 0;
 		gameChar.alpha = 0;
-
+		gameCover.loadGraphic(Paths.Data("games/" + gameID + "/images/cover.png"));
+		gameChar.loadGraphic(Paths.Data("games/" + gameID + "/images/characters.png"));
 		if (!dontDoFades || dontDoFades == null)
 		{
 			fadeChar();
@@ -778,61 +738,69 @@ class Menu extends FlxState
 			pcIn.cancel();
 		}
 		triggerPlatforms();
-		gameCover.animation.play(gameID + "game");
-		gameChar.animation.play(gameID + "game");
-		if (gameID == 0) // sm64
+
+		if (gameData.url != null)
 		{
-			gameCover.x = -243;
-			gameCover.y = -118;
-			gameChar.x = 57;
-			gameChar.y = -100;
-		}
-		else if (gameID == 1)
-		{
-			gameCover.x = -170;
-			gameCover.y = -92;
-			gameChar.x = 29;
-			gameChar.y = -100;
-		}
-		else if (gameID == 2)
-		{
-			gameCover.x = -244;
-			gameCover.y = -86;
-			gameChar.x = 121;
-			gameChar.y = -94;
-		}
-		else if (gameID == 3)
-		{
-			gameCover.x = -243;
-			gameCover.y = -114;
-			gameChar.x = 178;
-			gameChar.y = -114;
-		}
-		else if (gameID == 4) // doom 2
-		{
-			gameCover.screenCenter(X);
-			gameCover.y = -114;
-		}
-		else if (gameID == 5)
-		{
-			gameCover.x = -465;
-			gameCover.y = -101;
-			gameChar.x = 543;
-			gameChar.y = -143;
-		}
-		else if (gameID == 6) // mc
-		{
-			gameCover.x = -232;
-			gameCover.y = -116;
-			gameChar.x = 11;
-			gameChar.y = -99;
-		}
-		else if (gameID == 7)
-		{
-			gameCover.x = -176;
-			gameCover.y = -113;
-			gameChar.x = 40;
-			gameChar.y = -110;
+			if (gameData.gameCover.x != null)
+			{
+				if (gameData.gameCover.x == "screencenter")
+				{
+					gameCover.screenCenter(X);
+				}
+				else
+				{
+					gameCover.x = gameData.gameCover.x;
+				}
+			}
+			else
+			{
+				gameCover.screenCenter(X);
+			}
+			if (gameData.gameCover.y != null)
+			{
+				if (gameData.gameCover.y == "screencenter")
+				{
+					gameCover.screenCenter(Y);
+				}
+				else
+				{
+					gameCover.y = gameData.gameCover.y;
+				}
+			}
+			else
+			{
+				gameCover.screenCenter(Y);
+			}
+			if (gameData.gameChar.x != null)
+			{
+				if (gameData.gameChar.x == "screencenter")
+				{
+					gameChar.screenCenter(X);
+				}
+				else
+				{
+					gameChar.x = gameData.gameChar.x;
+				}
+			}
+			else
+			{
+				gameChar.screenCenter(X);
+			}
+			if (gameData.gameChar.y != null)
+			{
+				if (gameData.gameChar.y == "screencenter")
+				{
+					gameChar.screenCenter(Y);
+				}
+				else
+				{
+					gameChar.y = gameData.gameChar.y;
+				}
+			}
+			else
+			{
+				gameChar.screenCenter(Y);
+			}
 		}
 		else
 		{
@@ -848,7 +816,6 @@ class Menu extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		currentGame = gameStringID[gameID];
 		gamepad = FlxG.gamepads.lastActive;
 		if (gamepad != null && !inSecondaryMenu)
 		{
@@ -911,18 +878,6 @@ class Menu extends FlxState
 				leftArrowClick();
 			}
 		}
-		if (FlxG.keys.justReleased.F)
-		{
-			#if windows
-			winAlert("test", "please", "error");
-			#end
-		}
-		if (FlxG.keys.justReleased.D)
-		{
-			#if html5
-			JsLib.eval("openURL('https://gamesandstuffdevver.letsgoaway.repl.co', true);");
-			#end
-		}
 		if (FlxG.keys.justReleased.RIGHT)
 		{
 			if (started && !inSecondaryMenu)
@@ -969,6 +924,14 @@ class Menu extends FlxState
 
 		if (started)
 		{
+			if (fader.mouseOver)
+			{
+				Mouse.cursor = "button";
+				if (FlxG.mouse.justReleased)
+				{
+					exitSecondaryMenu();
+				}
+			}
 			uiGrowThingy(leftArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver) : false);
 			uiGrowThingy(rightArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.RIGHT || gamepad_right || rightArrow.mouseOver) : false);
 			uiGrowThingy(platGamepad, 1.1, !inSecondaryMenu ? (platGamepad.mouseOver) : false);
@@ -979,9 +942,37 @@ class Menu extends FlxState
 			uiGrowThingy(discord, 1.05, !inSecondaryMenu ? (discord.mouseOver) : false);
 			if (!inSecondaryMenu)
 			{
-				if (leftArrow.mouseOver || rightArrow.mouseOver || playButton.mouseOver || download.mouseOver)
+				if (download.mouseOver)
 				{
 					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						downloadClicked(download);
+					}
+				}
+				else if (leftArrow.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						leftArrowClick(leftArrow);
+					}
+				}
+				else if (rightArrow.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						rightArrowClick(leftArrow);
+					}
+				}
+				else if (playButton.mouseOver)
+				{
+					Mouse.cursor = "button";
+					if (FlxG.mouse.justReleased)
+					{
+						playButtonClick(playButton);
+					}
 				}
 				else if (discord.mouseOver)
 				{
@@ -1054,10 +1045,6 @@ class Menu extends FlxState
 				{
 					Mouse.cursor = "arrow";
 				}
-			}
-			if (!menuLoaded)
-			{
-				menuLoaded = true;
 			}
 			if (!clicksoundstarted)
 			{

@@ -1,0 +1,18 @@
+{
+  "stringID": "sm64pcport",
+  "url": "https://sm64pcport.letsgoaway.repl.co",
+  "urlEndTag": "/",
+  "platforms": {
+    "pc": true,
+    "gamepad": true,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -243,
+    "y": -118
+  },
+  "gameChar": {
+    "x": 57,
+    "y": -100
+  }
+}

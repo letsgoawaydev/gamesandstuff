@@ -36,4 +36,12 @@ class Paths
 	{
 		return 'assets/images/' + file;
 	}
+
+	/**
+	 * Redirects to `'assets/data/' + file` 
+	 */
+	static public function Data(file):String
+	{
+		return 'assets/data/' + file;
+	}
 }

@@ -1,0 +1,18 @@
+{
+  "stringID": "doom2",
+  "url": "https://doomjscompressed.letsgoaway.repl.co",
+  "urlEndTag": "/?bundleUrl=/d2?anonymous=1",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": true
+  },
+  "gameCover": {
+    "x": "screencenter",
+    "y": -114
+  },
+  "gameChar": {
+    "x": "screencenter",
+    "y": "screencenter"
+  } 
+}

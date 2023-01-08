@@ -1,0 +1,18 @@
+{
+  "stringID": "mari0",
+  "url": "https://mari0.letsgoaway.repl.co",
+  "urlEndTag": "/",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -176,
+    "y": -113
+  },
+  "gameChar": {
+    "x": 40,
+    "y": -110
+  }
+}

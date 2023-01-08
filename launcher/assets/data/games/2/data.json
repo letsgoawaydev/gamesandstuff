@@ -1,0 +1,18 @@
+{
+  "stringID": "subwaysurfers",
+  "url": "https://subwaysurfers.letsgoaway.repl.co",
+  "urlEndTag": "/",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": true
+  },
+  "gameCover": {
+    "x": -244,
+    "y": -86
+  },
+  "gameChar": {
+    "x": 121,
+    "y": -94
+  }
+}
