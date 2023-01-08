@@ -37,7 +37,7 @@ enum MenuType
 class Menu extends FlxState
 {
 	/* VERSION */
-	var version:Array<Int> = [2, 0, 0];
+	var version:Array<Int> = [2, 1, 0];
 	#if html5
 	var platform:String = "web";
 	#else
