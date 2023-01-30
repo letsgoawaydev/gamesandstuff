@@ -38,19 +38,7 @@ class Menu extends FlxState
 {
 	/* VERSION */
 	var version:Array<Int> = [2, 1, 0];
-	#if html5
-	var platform:String = "web";
-	#else
-	#if windows
-	var platform:String = "windows";
-	#else
-	#if linux
-	var platform:String = "linux";
-	#else
-	var platform:String = "unknown";
-	#end
-	#end
-	#end
+	var platform:String = #if html5 "web" #elseif windows "windows" #elseif linux "linux" #else "unknown" #end;
 	/* GAME DATA */
 	/* CHANGE THESE VALUES */
 	var gameData:Dynamic;
