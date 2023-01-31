@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://lime.software/project/1.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://lime.software/project/1.0.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="games and stuff" file="gamesAndStuff" packageName="com.letsgoaway.gamesandstuff" package="com.letsgoaway.gamesandstuff" main="Main" version="2.0.0" company="letsgoaway games" />
+	<app title="games and stuff" file="gamesAndStuff" packageName="com.letsgoaway.gamesandstuff"
+		package="com.letsgoaway.gamesandstuff" main="Main" version="2.1.0"
+		company="letsgoaway games" />
 	<app preloader="flixel.system.FlxPreloader" />
 	<set name="SWF_VERSION" value="11.8" />
 	<icon path="assets/icons/favicon-32x32.png" size="32" />
@@ -15,13 +18,15 @@
 	<set name="BUILD_DIR" value="export" />
 	<source path="source" />
 	<assets path="assets" />
+	<library name="data" preload="false" />
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
+	<haxelib name="colyseus" />
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
 	<haxedef name="FLX_NO_SOUND_TRAY" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
-	<template path="assets/data/templates"/>
+	<template path="assets/data/templates" />
 </project>

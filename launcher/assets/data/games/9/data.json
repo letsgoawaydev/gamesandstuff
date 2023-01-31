@@ -1,0 +1,18 @@
+{
+  "stringID": "run",
+  "url": "https://flashas3.letsgoaway.repl.co",
+  "urlEndTag": "/#run1.swf",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -190,
+    "y": -110
+  },
+  "gameChar": {
+    "x": 77,
+    "y": -112
+  }
+}

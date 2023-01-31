@@ -1,0 +1,18 @@
+{
+  "stringID": "fnf",
+  "url": "https://fnf.letsgoaway.repl.co",
+  "urlEndTag": "/psych",
+  "platforms": {
+    "pc": true,
+    "gamepad": false,
+    "mobile": false
+  },
+  "gameCover": {
+    "x": -228,
+    "y": -105
+  },
+  "gameChar": {
+    "x": 142,
+    "y": -106
+  }
+}
