@@ -33,7 +33,7 @@ haxelib run lime setup
 ```
 
 Then run any of the bat files, then it should work!
-For windows build, make sure you have at least 2GB of space.
+For native builds, make sure you have at least 2GB of space.
 ## Platforms
 Currently supported platforms are:
 Windows, iOS WebApp, Xbox One or Xbox Series X/S via Microsoft Edge and the Web.
