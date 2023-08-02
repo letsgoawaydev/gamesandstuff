@@ -47,3 +47,12 @@ Windows only for now as it is an HTA Application.
 # Disclaimer
 Some of the things that are in my app I do not own, such as game logos and game characters.
 An update will be out soon where it adds the developers of the games under the game logo.
+## Star History
+
+<a href="https://star-history.com/#letsgoawaydev/gamesandstuff&Timeline">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=letsgoawaydev/gamesandstuff&type=Timeline&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=letsgoawaydev/gamesandstuff&type=Timeline" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=letsgoawaydev/gamesandstuff&type=Timeline" />
+  </picture>
+</a>
