@@ -11,7 +11,7 @@
 </div>
 
 # About
-We are currently under active development.
+Development has been postponed for now, but feel free to make any pull requests.
 Games and Stuff is a frontend UI for launching games hosted online. I mainly use repl.it to host, but by editing the source code you can redirect to what ever.
 # Launcher
 The main interface. It is written in Haxe using OpenFL and HaxeFlixel.
