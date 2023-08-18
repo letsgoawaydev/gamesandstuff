@@ -21,7 +21,6 @@
 	<library name="data" preload="false" />
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="colyseus" />
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />

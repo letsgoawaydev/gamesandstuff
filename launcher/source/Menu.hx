@@ -53,32 +53,32 @@ class Menu extends FlxState
 	var clicktostart:FlxSprite = new FlxSprite();
 	var gameCover:FlxSprite = new FlxSprite();
 	var gameChar:FlxSprite = new FlxSprite();
-	var leftArrow:FlxExtendedSprite = new FlxExtendedSprite();
-	var rightArrow:FlxExtendedSprite = new FlxExtendedSprite();
-	var selLeftArrow:FlxExtendedSprite = new FlxExtendedSprite();
-	var selRightArrow:FlxExtendedSprite = new FlxExtendedSprite();
-	var playButton:FlxExtendedSprite = new FlxExtendedSprite();
-	var platPC:FlxExtendedSprite = new FlxExtendedSprite();
-	var platMobile:FlxExtendedSprite = new FlxExtendedSprite();
-	var platGamepad:FlxExtendedSprite = new FlxExtendedSprite();
-	var settingsIcon:FlxExtendedSprite = new FlxExtendedSprite();
-	var settingsMenu:FlxExtendedSprite = new FlxExtendedSprite();
-	var controls:FlxExtendedSprite = new FlxExtendedSprite();
-	var discord:FlxExtendedSprite = new FlxExtendedSprite();
+	var leftArrow:FlxSprite = new FlxSprite();
+	var rightArrow:FlxSprite = new FlxSprite();
+	var selLeftArrow:FlxSprite = new FlxSprite();
+	var selRightArrow:FlxSprite = new FlxSprite();
+	var playButton:FlxSprite = new FlxSprite();
+	var platPC:FlxSprite = new FlxSprite();
+	var platMobile:FlxSprite = new FlxSprite();
+	var platGamepad:FlxSprite = new FlxSprite();
+	var settingsIcon:FlxSprite = new FlxSprite();
+	var settingsMenu:FlxSprite = new FlxSprite();
+	var controls:FlxSprite = new FlxSprite();
+	var discord:FlxSprite = new FlxSprite();
 	// Tweens
 	var coverFadeIn:FlxTween;
 	var charFadeIn:FlxTween;
 	var pcIn:FlxTween;
 	var mobileIn:FlxTween;
 	var gamepadIn:FlxTween;
-	var fader:FlxExtendedSprite = new FlxExtendedSprite();
+	var fader:FlxSprite = new FlxSprite();
 	var faderIn:FlxTween;
 	var faderOut:FlxTween;
 
 	// Settings Stuffs
-	var set_antiAliasingSwitch = new FlxExtendedSprite();
+	var set_antiAliasingSwitch = new FlxSprite();
 	var set_antiAliasingText = new FlxText();
-	var set_windowSwitch:FlxExtendedSprite = new FlxExtendedSprite();
+	var set_windowSwitch:FlxSprite = new FlxSprite();
 	var set_windowText:FlxText = new FlxText();
 	var versionText:FlxText = new FlxText();
 	// Flixel
@@ -106,7 +106,7 @@ class Menu extends FlxState
 	#end
 	// Other
 	var s:FlxSound;
-	var download:FlxExtendedSprite = new FlxExtendedSprite();
+	var download:FlxSprite = new FlxSprite();
 	var loading:Bool = false;
 	var menuType:EnumValue = main;
 
@@ -334,6 +334,7 @@ class Menu extends FlxState
 		platGamepad.antialiasing = _save.data.antialiasing;
 		controls.antialiasing = _save.data.antialiasing;
 		discord.antialiasing = _save.data.antialiasing;
+		FlxSprite.defaultAntialiasing = _save.data.antialiasing;
 	}
 
 	function uiFaderIn(alphaVal:Float):Void
@@ -366,7 +367,7 @@ class Menu extends FlxState
 	{
 		if (menuType == settings)
 		{
-			if (!(settingsMenu.mouseOver || set_antiAliasingSwitch.mouseOver))
+			if (!(FlxG.mouse.overlaps(settingsMenu) || FlxG.mouse.overlaps(set_antiAliasingSwitch)))
 			{
 				uiFaderOut();
 				_save.flush();
@@ -379,7 +380,7 @@ class Menu extends FlxState
 		}
 		else if (menuType == controlsPC || menuType == controlsGamepad || menuType == controlsMobile)
 		{
-			if (!(controls.mouseOver))
+			if (!(FlxG.mouse.overlaps(controls)))
 			{
 				uiFaderOut();
 				loading = false;
@@ -402,7 +403,7 @@ class Menu extends FlxState
 		}
 	}
 
-	function downloadClicked(download:FlxExtendedSprite):Void
+	function downloadClicked(download:FlxSprite):Void
 	{
 		if (!inSecondaryMenu)
 		{
@@ -594,7 +595,7 @@ class Menu extends FlxState
 
 	// Mouse Related Scripts
 	// Click
-	function leftArrowClick(?leftArrow:FlxExtendedSprite):Void
+	function leftArrowClick(?leftArrow:FlxSprite):Void
 	{
 		if (!inSecondaryMenu)
 		{
@@ -612,7 +613,7 @@ class Menu extends FlxState
 		}
 	}
 
-	function rightArrowClick(?rightArrow:FlxExtendedSprite):Void
+	function rightArrowClick(?rightArrow:FlxSprite):Void
 	{
 		if (!inSecondaryMenu)
 		{
@@ -628,9 +629,9 @@ class Menu extends FlxState
 		redirect(gameData.url + gameData.urlEndTag);
 	}
 
-	function playButtonClick(playButton:FlxExtendedSprite):Void
+	function playButtonClick(playButton:FlxSprite):Void
 	{
-		if (!inSecondaryMenu && startButtonFix && playButton.mouseOver)
+		if (!inSecondaryMenu && startButtonFix && FlxG.mouse.overlaps(playButton))
 		{
 			sound("assets/sounds/play");
 			_save.data.lastgameid = gameID;
@@ -885,7 +886,7 @@ class Menu extends FlxState
 		/**
 		 * nice feedback thingy just test it trust me
 		 */
-		function uiGrowThingy(sprite:FlxExtendedSprite, maxGrow:Float, bool:Bool)
+		function uiGrowThingy(sprite:FlxSprite, maxGrow:Float, bool:Bool)
 		{
 			if (bool)
 			{
@@ -912,7 +913,7 @@ class Menu extends FlxState
 
 		if (started)
 		{
-			if (fader.mouseOver)
+			if (FlxG.mouse.overlaps(fader))
 			{
 				Mouse.cursor = "button";
 				if (FlxG.mouse.justReleased)
@@ -920,17 +921,17 @@ class Menu extends FlxState
 					exitSecondaryMenu();
 				}
 			}
-			uiGrowThingy(leftArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.LEFT || gamepad_left || leftArrow.mouseOver) : false);
-			uiGrowThingy(rightArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.RIGHT || gamepad_right || rightArrow.mouseOver) : false);
-			uiGrowThingy(platGamepad, 1.1, !inSecondaryMenu ? (platGamepad.mouseOver) : false);
-			uiGrowThingy(platPC, 1.1, !inSecondaryMenu ? (platPC.mouseOver) : false);
-			uiGrowThingy(platMobile, 1.1, !inSecondaryMenu ? (platMobile.mouseOver) : false);
-			uiGrowThingy(download, 1.05, !inSecondaryMenu ? (download.mouseOver) : false);
-			uiGrowThingy(settingsIcon, 1.05, !inSecondaryMenu ? (settingsIcon.mouseOver) : false);
-			uiGrowThingy(discord, 1.05, !inSecondaryMenu ? (discord.mouseOver) : false);
+			uiGrowThingy(leftArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.LEFT || gamepad_left || FlxG.mouse.overlaps(leftArrow)) : false);
+			uiGrowThingy(rightArrow, 1.15, !inSecondaryMenu ? (FlxG.keys.pressed.RIGHT || gamepad_right || FlxG.mouse.overlaps(rightArrow)) : false);
+			uiGrowThingy(platGamepad, 1.1, !inSecondaryMenu ? (FlxG.mouse.overlaps(platGamepad)) : false);
+			uiGrowThingy(platPC, 1.1, !inSecondaryMenu ? (FlxG.mouse.overlaps(platPC)) : false);
+			uiGrowThingy(platMobile, 1.1, !inSecondaryMenu ? (FlxG.mouse.overlaps(platMobile)) : false);
+			uiGrowThingy(download, 1.05, !inSecondaryMenu ? (FlxG.mouse.overlaps(download)) : false);
+			uiGrowThingy(settingsIcon, 1.05, !inSecondaryMenu ? (FlxG.mouse.overlaps(settingsIcon)) : false);
+			uiGrowThingy(discord, 1.05, !inSecondaryMenu ? (FlxG.mouse.overlaps(discord)) : false);
 			if (!inSecondaryMenu)
 			{
-				if (download.mouseOver)
+				if (FlxG.mouse.overlaps(download))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -938,7 +939,7 @@ class Menu extends FlxState
 						downloadClicked(download);
 					}
 				}
-				else if (leftArrow.mouseOver)
+				else if (FlxG.mouse.overlaps(leftArrow))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -946,7 +947,7 @@ class Menu extends FlxState
 						leftArrowClick(leftArrow);
 					}
 				}
-				else if (rightArrow.mouseOver)
+				else if (FlxG.mouse.overlaps(rightArrow))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -954,7 +955,7 @@ class Menu extends FlxState
 						rightArrowClick(leftArrow);
 					}
 				}
-				else if (playButton.mouseOver)
+				else if (FlxG.mouse.overlaps(playButton))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -962,7 +963,7 @@ class Menu extends FlxState
 						playButtonClick(playButton);
 					}
 				}
-				else if (discord.mouseOver)
+				else if (FlxG.mouse.overlaps(discord))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -970,7 +971,7 @@ class Menu extends FlxState
 						discordClicked();
 					}
 				}
-				else if (settingsIcon.mouseOver)
+				else if (FlxG.mouse.overlaps(settingsIcon))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
@@ -978,7 +979,7 @@ class Menu extends FlxState
 						settingsIconClicked();
 					}
 				}
-				else if (platPC.mouseOver)
+				else if (FlxG.mouse.overlaps(platPC))
 				{
 					if (currentGameSupportsPC())
 					{
@@ -990,7 +991,7 @@ class Menu extends FlxState
 						controls.loadGraphic(Paths.Images("spinner.png"));
 					}
 				}
-				else if (platMobile.mouseOver)
+				else if (FlxG.mouse.overlaps(platMobile))
 				{
 					if (currentGameSupportsMobile())
 					{
@@ -1002,7 +1003,7 @@ class Menu extends FlxState
 						controls.loadGraphic(Paths.Images("spinner.png"));
 					}
 				}
-				else if (platGamepad.mouseOver)
+				else if (FlxG.mouse.overlaps(platGamepad))
 				{
 					if (currentGameSupportsGamepad())
 					{
@@ -1021,7 +1022,7 @@ class Menu extends FlxState
 			}
 			else
 			{
-				if (set_antiAliasingSwitch.mouseOver)
+				if (FlxG.mouse.overlaps(set_antiAliasingSwitch))
 				{
 					Mouse.cursor = "button";
 					if (FlxG.mouse.justReleased)
